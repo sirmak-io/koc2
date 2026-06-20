@@ -9,10 +9,7 @@ message,
 history = [],
 outparty = ""
 } = req.body;
-
-```
 const systemPrompt = `
-```
 
 Sen bir akademik araştırma için kullanılan tarafsız bir sohbet asistanısın.
 
