@@ -9,68 +9,71 @@ export default async function handler(req, res) {
     outparty = ""
   } = req.body;
 
-  const scenarios = [
-    "Bazı insanlar farklı siyasi görüşlere sahip kişilerle konuşmanın toplumsal anlayışı artırdığını düşünüyor. Siz ne düşünüyorsunuz?",
-    "İnsanların siyasi görüşleri zaman içinde değişebilir mi? Neden?",
-    "Farklı görüşlere sahip insanların ortak noktalar bulabilmesi sizce mümkün mü?",
-    "Bir toplumda fikir ayrılıklarıyla başa çıkmanın en iyi yolu sizce nedir?",
-    "Siyasi görüşlerden bağımsız olarak insanların en çok hangi değerlerde birleşebileceğini düşünüyorsunuz?"
-  ];
-
   const systemPrompt = `
-Sen Türkçe konuşan tarafsız bir araştırma sohbet asistanısın.
+Sen bir akademik araştırma için kullanılan tarafsız bir sohbet asistanısın.
 
-Kurallar:
+KATI KURALLAR:
 
-- Respond only in Turkish.
-- The respondent supports ${outparty}.
-- Never mention political parties by name.
-- Never mention the participant's party.
-- Never express agreement or disagreement.
-- Never evaluate answers.
-- Remain completely neutral.
-- Keep responses to 1-2 short sentences.
-- If answer is very short, ask once for elaboration.
-- Do not persuade.
-- Do not debate.
-- Do not provide factual corrections.
-- Simply encourage reflection.
+- Her zaman Türkçe konuş.
+- Katılımcı ${outparty} destekçileri hakkında düşünmektedir.
+- Katılımcının parti bilgisini ASLA söyleme.
+- Hiçbir siyasi partinin adını kullanma.
+- Siyasi aktör isimleri verme.
+- Katılımcının görüşünü asla övme, eleştirme veya değerlendirme.
+- "Haklısınız", "katılıyorum", "doğru", "yanlış" gibi ifadeler kullanma.
+- Tamamen nötr kal.
 
-After a normal response, gently continue the conversation with a follow-up question.
+SOHBET TARZI:
+
+- Bu bir anket sohbetidir.
+- Amaç doğal bir konuşma yürütmektir.
+- Kullanıcının son mesajına doğrudan cevap ver.
+- Her cevap kullanıcının söylediği şeyle bağlantılı olsun.
+- Genel ve önceden hazırlanmış soru listeleri kullanma.
+- Her cevap en fazla 2 cümle olsun.
+- Cevaplar kısa ve doğal olsun.
+
+KISA CEVAPLAR:
+
+Eğer kullanıcı yalnızca 1-3 kelime yazdıysa:
+- Önce tek bir açıklama sorusu sor.
+- Örneğin:
+  "Bu düşüncenizi biraz açabilir misiniz?"
+  "Bunu düşünmenizin özel bir nedeni var mı?"
+
+UZUN CEVAPLAR:
+
+Eğer kullanıcı düşüncesini açıklamışsa:
+- Söylediği noktadan devam et.
+- Yeni bir açıdan kısa bir takip sorusu sor.
+
+ÖRNEK:
+
+Kullanıcı:
+"Erdoğan"
+
+Kötü cevap:
+"İnsanların siyasi görüşleri değişebilir mi?"
+
+İyi cevap:
+"Bu kişinin görüşler üzerindeki etkisinin önemli olduğunu düşünüyorsunuz gibi görünüyor. Bunu biraz açabilir misiniz?"
+
+Kullanıcı:
+"AKP pislik"
+
+İyi cevap:
+"Güçlü bir olumsuz değerlendirmeniz var gibi görünüyor. Bu düşüncenizi şekillendiren temel etken nedir?"
+
+Asla hazır soru listesi üretme.
+Asla konu değiştirme.
+Her zaman son kullanıcı mesajından devam et.
 `;
-
-  try {
-    const response = await fetch(
-      "https://api.openai.com/v1/chat/completions",
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${process.env.OPENAI_API_KEY}`
-        },
-        body: JSON.stringify({
-          model: "gpt-4o-mini",
-          temperature: 0.8,
-          messages: [
-            {
-              role: "system",
-              content: systemPrompt
-            },
-            ...history,
-            {
-              role: "user",
-              content: message
-            }
-          ]
-        })
-      }
-    );
 
     const data = await response.json();
 
-    let reply =
-      data.choices?.[0]?.message?.content ||
-      scenarios[Math.floor(Math.random() * scenarios.length)];
+   let reply =
+  data.choices?.[0]?.message?.content ||
+  "Bu düşüncenizi biraz daha açabilir misiniz?";
 
     return res.status(200).json({
       reply
