@@ -1,188 +1,213 @@
 <!DOCTYPE html>
 <html lang="tr">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Civic Chat</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 20px;
+      background: #ffffff;
+    }
 
-<title>Sohbet</title>
+    #chat {
+      height: 420px;
+      border: 1px solid #dcdcdc;
+      border-radius: 12px;
+      padding: 12px;
+      overflow-y: auto;
+      background: #fafafa;
+      margin-bottom: 12px;
+    }
 
-<style>
-body{
-font-family:Arial,sans-serif;
-margin:20px;
-}
+    .msg {
+      margin: 10px 0;
+      padding: 10px 12px;
+      border-radius: 10px;
+      max-width: 75%;
+      line-height: 1.4;
+      white-space: pre-wrap;
+    }
 
-#chat{
-height:400px;
-overflow-y:auto;
-border:1px solid #ddd;
-padding:10px;
-border-radius:10px;
-margin-bottom:10px;
-}
+    .bot {
+      background: #f1f1f1;
+      color: #222;
+    }
 
-.bot{
-background:#f3f4f6;
-padding:10px;
-margin:8px 0;
-border-radius:8px;
-max-width:80%;
-}
+    .user {
+      background: #dbeafe;
+      color: #111;
+      margin-left: auto;
+      text-align: right;
+    }
 
-.user{
-background:#dbeafe;
-padding:10px;
-margin:8px 0 8px auto;
-border-radius:8px;
-max-width:80%;
-text-align:right;
-}
+    .row {
+      display: flex;
+      gap: 8px;
+    }
 
-.row{
-display:flex;
-gap:8px;
-}
+    #input {
+      flex: 1;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      font-size: 14px;
+    }
 
-input{
-flex:1;
-padding:10px;
-}
+    button {
+      padding: 10px 14px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+    }
 
-button{
-padding:10px 15px;
-}
-</style>
+    #sendBtn {
+      background: #2563eb;
+      color: white;
+    }
 
+    #sendBtn:disabled,
+    #input:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+  </style>
 </head>
 <body>
+  <div id="chat"></div>
 
-<div id="chat"></div>
+  <div class="row">
+    <input id="input" type="text" placeholder="Mesajınızı yazın">
+    <button id="sendBtn">Gönder</button>
+  </div>
 
-<div class="row">
-<input id="input" placeholder="Yanıtınızı yazın">
-<button id="send">Gönder</button>
-</div>
+  <script>
+    const chat = document.getElementById("chat");
+    const input = document.getElementById("input");
+    const sendBtn = document.getElementById("sendBtn");
 
-<script>
+    const params = new URLSearchParams(window.location.search);
+    const participantId = params.get("pid");
+    const inparty = params.get("inparty");
+    const outparty = params.get("outparty");
 
-const chat = document.getElementById("chat");
-const input = document.getElementById("input");
-const button = document.getElementById("send");
+    let history = [];
+    let messageCount = 0;
+    const MAX_MESSAGES = 3;
+    let isWaiting = false;
+    let chatFinished = false;
 
-const params = new URLSearchParams(window.location.search);
+    function addMessage(role, text) {
+      const div = document.createElement("div");
+      div.className = "msg " + role;
+      div.textContent = text;
+      chat.appendChild(div);
+      chat.scrollTop = chat.scrollHeight;
+    }
 
-const participantId = params.get("pid");
-const outparty = params.get("outparty");
+    function lockChat() {
+      input.disabled = true;
+      sendBtn.disabled = true;
+    }
 
-let history = [];
-let turn = 0;
-const MAX_TURNS = 3;
+    function unlockChat() {
+      if (chatFinished) return;
+      input.disabled = false;
+      sendBtn.disabled = false;
+      input.focus();
+    }
 
-function add(role,text){
+    function notifyQualtricsChatComplete() {
+      try {
+        window.parent.postMessage(
+          {
+            type: "chatComplete",
+            participantId: participantId,
+            inparty: inparty,
+            outparty: outparty,
+            history: history
+          },
+          "*"
+        );
+      } catch (e) {
+        console.error("postMessage error:", e);
+      }
+    }
 
-const div=document.createElement("div");
+    function finishChat() {
+      if (chatFinished) return;
+      chatFinished = true;
+      addMessage("bot", "Teşekkürler. Sohbet tamamlandı. Lütfen ankete devam edin.");
+      lockChat();
+      notifyQualtricsChatComplete();
+    }
 
-div.className=role;
+    addMessage(
+      "bot",
+      "Merhaba. Bu kısa sohbet 3 mesaj sürecek. Bugün " +
+        outparty +
+        " destekçileri ve demokrasi algıları hakkında konuşacağız. Sohbet tamamlandığında ankete devam edebilirsiniz."
+    );
 
-div.innerText=text;
+    async function sendMessage() {
+      if (isWaiting || chatFinished) return;
 
-chat.appendChild(div);
+      const text = input.value.trim();
+      if (!text) return;
 
-chat.scrollTop=chat.scrollHeight;
+      addMessage("user", text);
+      history.push({ role: "user", content: text });
+      input.value = "";
+      messageCount += 1;
 
-}
+      isWaiting = true;
+      lockChat();
 
-function finish(){
+      try {
+        const res = await fetch("/api/chat", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({
+            message: text,
+            participantId: participantId,
+            inparty: inparty,
+            outparty: outparty,
+            history: history
+          })
+        });
 
-add(
-"bot",
-"Teşekkürler. Sohbet tamamlandı. Lütfen ankete devam edin."
-);
+        const data = await res.json();
+        const reply = data.reply || "Üzgünüm, şu anda cevap üretemedim.";
 
-window.parent.postMessage(
-{
-type:"chatComplete",
-history
-},
-"*"
-);
+        addMessage("bot", reply);
+        history.push({ role: "assistant", content: reply });
 
-input.disabled=true;
-button.disabled=true;
+        if (messageCount >= MAX_MESSAGES) {
+          finishChat();
+        } else {
+          unlockChat();
+        }
+      } catch (err) {
+        addMessage("bot", "Bağlantı hatası oluştu. Lütfen tekrar deneyin.");
+        console.error(err);
+        unlockChat();
+      } finally {
+        isWaiting = false;
+      }
+    }
 
-}
+    sendBtn.addEventListener("click", sendMessage);
 
-async function sendMessage(){
-
-const text=input.value.trim();
-
-if(!text) return;
-
-add("user",text);
-
-history.push({
-role:"user",
-content:text
-});
-
-input.value="";
-
-const response = await fetch("/api/chat",{
-
-method:"POST",
-
-headers:{
-"Content-Type":"application/json"
-},
-
-body:JSON.stringify({
-
-message:text,
-history,
-outparty,
-turn
-
-})
-
-});
-
-const data = await response.json();
-
-add("bot",data.reply);
-
-history.push({
-role:"assistant",
-content:data.reply
-});
-
-turn++;
-
-if(turn>=MAX_TURNS){
-
-finish();
-
-}
-
-}
-
-button.onclick=sendMessage;
-
-input.addEventListener("keydown",e=>{
-
-if(e.key==="Enter"){
-
-sendMessage();
-
-}
-
-});
-
-add(
-"bot",
-"Merhaba. Kısa bir sohbet yapacağız. Başlamak için düşüncelerinizi paylaşabilirsiniz."
-);
-
-</script>
-
+    input.addEventListener("keydown", function (e) {
+      if (e.key === "Enter") {
+        e.preventDefault();
+        sendMessage();
+      }
+    });
+  </script>
 </body>
 </html>
