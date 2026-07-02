@@ -143,12 +143,7 @@
   chatFinished = true;
   lockChat();
   notifyQualtricsChatComplete();
-}
-
-    addMessage(
-      "bot",
-      "Farklı siyasi görüşlerden insanların ortak paydalar bulabileceğini düşünüyor musunuz?"
-    );
+};
 
     async function sendMessage() {
       if (isWaiting || chatFinished) return;
