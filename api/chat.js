@@ -140,11 +140,9 @@ return res.status(200).json({
 });
 
 } catch (err) {
-
   console.error(err);
 
   return res.status(500).json({
-    reply: "Sunucu hatası oluştu."
+    reply: err.message
   });
-
 }
