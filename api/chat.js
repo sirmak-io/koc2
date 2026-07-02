@@ -27,7 +27,7 @@ export default async function handler(req, res) {
   if (assistantTurns === 0) {
 
     reply =
-`Tahmininiz için teşekkür ederim. Siz %${estimate} tahmin ettiniz. Araştırmada bulunan oran %24'tür. Bu, gerçek değeri olduğundan daha yüksek tahmin ettiğiniz anlamına geliyor.
+`Tahmininiz için teşekkür ederim. Siz %${estimate} tahmin ettiniz. Araştırmada bulunan oran %24'tür. ${comparison}
 
 Bu tahmini yaparken sizi en çok hangi bilgi veya deneyim etkiledi?`;
 
