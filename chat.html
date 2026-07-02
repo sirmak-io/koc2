@@ -195,14 +195,16 @@
       }
     }
 
-    sendBtn.addEventListener("click", sendMessage);
+   loadFirstMessage();
 
-    input.addEventListener("keydown", function (e) {
-      if (e.key === "Enter") {
-        e.preventDefault();
-        sendMessage();
-      }
-    });
+sendBtn.addEventListener("click", sendMessage);
+
+input.addEventListener("keydown", function (e) {
+  if (e.key === "Enter") {
+    e.preventDefault();
+    sendMessage();
+  }
+});
   </script>
 </body>
 </html>
