@@ -1,6 +1,9 @@
 export default async function handler(req, res) {
 
-  const { history = [] } = req.body;
+  const {
+  history = [],
+  estimate
+} = req.body;
 
   // Assistant'ın şimdiye kadar kaç mesaj gönderdiğini say
   const assistantTurns = history.filter(
