@@ -145,7 +145,53 @@
   notifyQualtricsChatComplete();
 };
 
-    async function sendMessage() {
+    async function loadFirstMessage() {
+
+  isWaiting = true;
+  lockChat();
+
+  try {
+
+    const res = await fetch("/api/chat", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        message: "",
+        participantId,
+        inparty,
+        outparty,
+        estimate,
+        history
+      })
+    });
+
+    const data = await res.json();
+
+    const reply = data.reply || "Üzgünüm, şu anda cevap üretemedim.";
+
+    addMessage("bot", reply);
+
+    history.push({
+      role: "assistant",
+      content: reply
+    });
+
+    unlockChat();
+
+  } catch (err) {
+
+    addMessage("bot", "Bağlantı hatası oluştu.");
+    console.error(err);
+
+  } finally {
+
+    isWaiting = false;
+
+  }
+
+} sendMessage() {
       if (isWaiting || chatFinished) return;
 
       const text = input.value.trim();
