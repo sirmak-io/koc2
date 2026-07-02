@@ -12,6 +12,18 @@ export default async function handler(req, res) {
 
   let reply;
 
+  const value = Number(estimate);
+
+  let comparison;
+
+  if (value > 24) {
+    comparison = "Bu, gerçek değeri olduğundan daha yüksek tahmin ettiğiniz anlamına geliyor.";
+  } else if (value < 24) {
+    comparison = "Bu, gerçek değeri olduğundan daha düşük tahmin ettiğiniz anlamına geliyor.";
+  } else {
+    comparison = "Tahmininiz araştırmada bulunan değerle aynıdır.";
+  }
+  
   if (assistantTurns === 0) {
 
     const value = Number(estimate);
