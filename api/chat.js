@@ -41,9 +41,7 @@ Bu bulgudan kendiniz için çıkardığınız bir düşünce var mı?`;
   } else {
 
     reply =
-`Paylaştığınız görüş için teşekkür ederim.
-
-Düşüncelerinizi paylaştığınız için teşekkür ederim. Araştırmamıza katkınız bizim için değerli. Lütfen anketin sonraki bölümüne devam ediniz.`;
+`Düşüncelerinizi paylaştığınız için teşekkür ederim. Araştırmamıza katkınız bizim için değerli. Lütfen anketin sonraki bölümüne devam ediniz.`;
 
   }
 
