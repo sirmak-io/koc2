@@ -117,29 +117,34 @@ After the participant replies for the second time, the third assistant message s
       }
     );
 
-    const data = await response.json();
+   const data = await response.json();
 
-   if (!response.ok) {
-  const error = await response.json();
-  console.error(error);
+if (!response.ok) {
+  console.error("OpenAI API Error:", data);
 
   return res.status(500).json({
     reply: "Şu anda teknik bir sorun oluştu. Lütfen daha sonra tekrar deneyiniz."
   });
 }
 
-    return res.status(200).json({
-      reply: data.choices[0].message.content
-    });
+if (!data.choices?.length) {
+  console.error("Unexpected OpenAI response:", data);
 
-  } catch (err) {
+  return res.status(500).json({
+    reply: "Beklenmeyen bir yanıt alındı."
+  });
+}
 
-    console.error(err);
+return res.status(200).json({
+  reply: data.choices[0].message.content
+});
 
-    return res.status(500).json({
-      reply: "Sunucu hatası oluştu."
-    });
+} catch (err) {
 
-  }
+  console.error(err);
+
+  return res.status(500).json({
+    reply: "Sunucu hatası oluştu."
+  });
 
 }
