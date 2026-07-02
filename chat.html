@@ -137,12 +137,11 @@
     }
 
     function finishChat() {
-      if (chatFinished) return;
-      chatFinished = true;
-      addMessage("bot", "Düşüncelerinizi paylaştığınız için teşekkür ederim. Araştırmamıza katkınız bizim için değerli. Lütfen anketin sonraki bölümüne devam ediniz.");
-      lockChat();
-      notifyQualtricsChatComplete();
-    }
+  if (chatFinished) return;
+  chatFinished = true;
+  lockChat();
+  notifyQualtricsChatComplete();
+}
 
     addMessage(
       "bot",
