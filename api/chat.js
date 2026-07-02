@@ -14,6 +14,18 @@ export default async function handler(req, res) {
 
   if (assistantTurns === 0) {
 
+    const value = Number(estimate);
+
+let comparison;
+
+if (value > 24) {
+  comparison = "Bu, gerçek değeri olduğundan daha yüksek tahmin ettiğiniz anlamına geliyor.";
+} else if (value < 24) {
+  comparison = "Bu, gerçek değeri olduğundan daha düşük tahmin ettiğiniz anlamına geliyor.";
+} else {
+  comparison = "Tahmininiz araştırmada bulunan değerle aynıdır.";
+}
+    
     reply =
 `Tahmininiz için teşekkür ederim. Siz %${estimate} tahmin ettiniz. Araştırmada bulunan oran %24'tür. Bu, gerçek değeri olduğundan daha yüksek tahmin ettiğiniz anlamına geliyor.
 
