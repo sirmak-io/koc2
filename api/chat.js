@@ -119,12 +119,13 @@ After the participant replies for the second time, the third assistant message s
 
     const data = await response.json();
 
-    if (!response.ok) {
-      console.error(data);
-      return res.status(response.status).json({
-        reply: "OpenAI API hatası oluştu."
-      });
-    }
+   if (!response.ok) {
+  console.error(data);
+
+  return res.status(response.status).json({
+    reply: JSON.stringify(data)
+  });
+}
 
     return res.status(200).json({
       reply: data.choices[0].message.content
