@@ -120,10 +120,11 @@ After the participant replies for the second time, the third assistant message s
     const data = await response.json();
 
    if (!response.ok) {
-  console.error(data);
+  const error = await response.json();
+  console.error(error);
 
-  return res.status(response.status).json({
-    reply: JSON.stringify(data)
+  return res.status(500).json({
+    reply: "Şu anda teknik bir sorun oluştu. Lütfen daha sonra tekrar deneyiniz."
   });
 }
 
