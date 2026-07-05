@@ -15,50 +15,67 @@ export default async function handler(req, res) {
     } = req.body;
 
     const assistantTurns = history.filter(
-  m => m.role === "assistant"
-).length;
+      m => m.role === "assistant"
+    ).length;
 
-const value = Number(estimate);
+    // ---------- FIRST ASSISTANT MESSAGE ----------
+    const value = Number(estimate);
 
-let comparison;
+    let comparison;
 
-if (value > 24) {
-  comparison =
-    "Bu, araştırmada bulunan değerden daha yüksek bir tahminde bulunduğunuz anlamına geliyor.";
-} else if (value < 24) {
-  comparison =
-    "Bu, araştırmada bulunan değerden daha düşük bir tahminde bulunduğunuz anlamına geliyor.";
-} else {
-  comparison =
-    "Tahmininiz araştırmada bulunan değerle aynıdır.";
-}
+    if (value > 24) {
+      comparison =
+        "Bu, araştırmada bulunan değerden daha yüksek bir tahminde bulunduğunuz anlamına geliyor.";
+    } else if (value < 24) {
+      comparison =
+        "Bu, araştırmada bulunan değerden daha düşük bir tahminde bulunduğunuz anlamına geliyor.";
+    } else {
+      comparison =
+        "Tahmininiz araştırmada bulunan değerle aynıdır.";
+    }
 
-if (assistantTurns === 0) {
-  return res.status(200).json({
-    reply: `Tahmininiz için teşekkür ederim. Siz %${estimate} tahmin ettiniz. Araştırmada bulunan oran %24'tür. ${comparison}
+    if (assistantTurns === 0) {
+
+      return res.status(200).json({
+        reply:
+`Tahmininiz için teşekkür ederim. Siz %${estimate} tahmin ettiniz. Araştırmada bulunan oran %24'tür. ${comparison}
 
 Bu tahmini yaparken sizi en çok hangi bilgi veya deneyim etkiledi?`
-  });
-}
-    
+      });
+
+    }
+
+    // ---------- THIRD ASSISTANT MESSAGE ----------
+    if (assistantTurns >= 2) {
+
+      return res.status(200).json({
+        reply:
+`Düşüncelerinizi paylaştığınız için teşekkür ederim. Araştırmamıza katkınız bizim için değerli. Lütfen anketin sonraki bölümüne devam ediniz.`
+      });
+
+    }
+
+    // ---------- SECOND ASSISTANT MESSAGE (GPT) ----------
+
     const prompt = `
-    
-You are a research assistant helping a participant in an academic survey about political attitudes in Turkey. 
+You are a research assistant helping a participant in an academic survey about political attitudes in Turkey.
+
 Imagine you are speaking to someone sitting across from you for two minutes. Write the way you would naturally speak.
-•	Use clear, warm, respectful, and conversational tone in Turkish.
-•	Address the participant politely ("siz").
-•	Remain neutral throughout the conversation.
-•	Do not invent statistics or factual claims beyond those provided in this prompt.
-•	Do not mention political parties, politicians, or political events beyond the information provided.
-•	Avoid unnecessary transitions, repetition, or summaries.
-•	Do not repeat information the participant has already provided.
-Your goal is to help the participant participate into a conversation on the difference between their estimate and the survey benchmark, rather than to judge their estimate, persuade them to change their views, or debate political issues. 
 
-*Core ideas to communicate naturally during the conversation:
+The participant is completing the survey in Turkish.
 
-• Anti-democratic attitudes are uncommon among ordinary voters across different political parties in Turkey.
-• People often overestimate how common anti-democratic attitudes are among supporters of other political parties.
-• Representative surveys capture ordinary voters rather than the most visible political voices.
+• Use natural, fluent Turkish.
+• Address the participant politely ("siz").
+• Remain neutral.
+• Be warm and conversational.
+• Keep the response short.
+• Do not repeat what the participant just said.
+• Do not start with expressions such as "Anladım", "Haklısınız", "Söylediğiniz gibi", or by paraphrasing the participant's answer.
+• Avoid unnecessary transitions or summaries.
+• Do not mention politicians or political events.
+• Do not invent facts.
+
+Your goal is simply to help the participant reflect on the difference between their estimate and the survey benchmark.
 
 Participant's estimate: ${estimate}%
 
@@ -66,38 +83,35 @@ Out-party: ${outparty}
 
 Benchmark: 24%
 
-If the participant questions the benchmark:
--Briefly explain that the benchmark comes from a nationally representative survey.
--Do not claim certainty beyond the available evidence.
+Naturally communicate these ideas if relevant:
 
-If the participant gives only a brief response, continue naturally by communicating the core takeaway.
+• Anti-democratic attitudes are relatively uncommon among ordinary voters.
+• People often overestimate how common these attitudes are among supporters of other parties.
+• Representative surveys capture ordinary voters rather than only the loudest political voices.
 
-If the participant reacts defensively or feels judged:
--Clarify that your role is to facilitate reflection rather than evaluate or persuade.
+If the participant questions the benchmark,
+briefly explain that it comes from a nationally representative survey without claiming certainty beyond the evidence.
 
-If the participant continues to disagree:
--Respectfully acknowledge the position and do not continue debating.
--Briefly restate the broader survey finding in your own words and conclude naturally.
+If the participant reacts defensively,
+briefly explain that your role is to facilitate reflection rather than evaluate them.
 
-After the participant replies, the second assistant message should:
-• respond directly to what the participant actually said;
-• Do not begin with phrases such as "Anladım", "Haklısınız", "Söylediğiniz gibi", or by restating their response.
-•	Keep the acknowledgement implicit and move directly into the reflection.
-•	Where appropriate, briefly note that people often form estimates based on personal experiences, conversations, or media exposure.
-• naturally communicate the core takeaway;
-• ask one brief reflection question encouraging the participant to consider what, if anything, they take away from the survey finding.
+Write ONLY the second assistant message.
 
-After the participant replies for the second time, the third assistant message should:
-End exactly with:
-"Düşüncelerinizi paylaştığınız için teşekkür ederim. Araştırmamıza katkınız bizim için değerli. Lütfen anketin sonraki bölümüne devam ediniz."
+The response should:
+
+• directly engage with the participant's explanation;
+• naturally connect personal experiences, conversations or media exposure to how estimates are formed when appropriate;
+• communicate the broader finding naturally;
+• contain at most three short sentences;
+• end with ONE brief open-ended reflection question.
+
+Do not conclude the conversation.
 `;
 
     const messages = [
       {
         role: "system",
         content: prompt
-          .replace(/\$\{estimate\}/g, estimate ?? "")
-          .replace(/\$\{outparty\}/g, outparty ?? "")
       },
       ...history
     ];
@@ -108,7 +122,7 @@ End exactly with:
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          "Authorization": `Bearer ${process.env.OPENAI_API_KEY}`
+          Authorization: `Bearer ${process.env.OPENAI_API_KEY}`
         },
         body: JSON.stringify({
           model: "gpt-4o-mini",
@@ -118,34 +132,41 @@ End exactly with:
       }
     );
 
-   const data = await response.json();
+    const data = await response.json();
 
-if (!response.ok) {
-  console.error("OpenAI API Error:", data);
+    if (!response.ok) {
 
-  return res.status(500).json({
-    reply: "Şu anda teknik bir sorun oluştu. Lütfen daha sonra tekrar deneyiniz."
-  });
-}
+      console.error("OpenAI API Error:", data);
 
-if (!data.choices?.length) {
-  console.error("Unexpected OpenAI response:", data);
+      return res.status(500).json({
+        reply:
+          "Şu anda teknik bir sorun oluştu. Lütfen daha sonra tekrar deneyiniz."
+      });
 
-  return res.status(500).json({
-    reply: "Beklenmeyen bir yanıt alındı."
-  });
-}
+    }
 
-return res.status(200).json({
-  reply: data.choices[0].message.content
-});
+    if (!data.choices?.length) {
 
-} catch (err) {
-  console.error(err);
+      console.error("Unexpected OpenAI response:", data);
 
-  return res.status(500).json({
-    reply: err.message
-  });
-}
+      return res.status(500).json({
+        reply: "Beklenmeyen bir yanıt alındı."
+      });
+
+    }
+
+    return res.status(200).json({
+      reply: data.choices[0].message.content
+    });
+
+  } catch (err) {
+
+    console.error(err);
+
+    return res.status(500).json({
+      reply: err.message
+    });
+
+  }
 
 }
