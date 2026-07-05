@@ -99,8 +99,6 @@ briefly explain that it comes from a nationally representative survey without cl
 If the participant reacts defensively,
 briefly explain that your role is to facilitate reflection rather than evaluate them.
 
-Write ONLY the second assistant message.
-
 The response should:
 
 • directly engage with the participant's explanation;
