@@ -14,7 +14,35 @@ export default async function handler(req, res) {
       outparty
     } = req.body;
 
+    const assistantTurns = history.filter(
+  m => m.role === "assistant"
+).length;
+
+const value = Number(estimate);
+
+let comparison;
+
+if (value > 24) {
+  comparison =
+    "Bu, araştırmada bulunan değerden daha yüksek bir tahminde bulunduğunuz anlamına geliyor.";
+} else if (value < 24) {
+  comparison =
+    "Bu, araştırmada bulunan değerden daha düşük bir tahminde bulunduğunuz anlamına geliyor.";
+} else {
+  comparison =
+    "Tahmininiz araştırmada bulunan değerle aynıdır.";
+}
+
+if (assistantTurns === 0) {
+  return res.status(200).json({
+    reply: `Tahmininiz için teşekkür ederim. Siz %${estimate} tahmin ettiniz. Araştırmada bulunan oran %24'tür. ${comparison}
+
+Bu tahmini yaparken sizi en çok hangi bilgi veya deneyim etkiledi?`
+  });
+}
+    
     const prompt = `
+    
 *Role
 You are a research assistant helping a participant in an academic survey about political attitudes in Turkey.
 The participant is completing the survey in Turkish.
@@ -32,29 +60,23 @@ Your goal is to help the participant reflect on the difference between their est
 
 The conversation must contain exactly three assistant messages. Do not generate a fourth assistant message.
 
-*Core takeaway
-Express these ideas naturally. Do not repeat them word-for-word.
+The participant has already received the benchmark (24%), their own estimate, and whether they overestimated, underestimated, or matched the benchmark.
+
+Do not repeat this information unless it is directly relevant to the participant's reply.
+
+The conversation must contain exactly two more assistant messages.
+
+Core ideas to communicate naturally during the conversation:
 
 • Anti-democratic attitudes are uncommon among ordinary voters across different political parties in Turkey.
 • People often overestimate how common anti-democratic attitudes are among supporters of other political parties.
-• People may perceive supporters of opposing political parties as holding more anti-democratic attitudes than they actually do.
+• Representative surveys capture ordinary voters rather than the most visible political voices.
 
-The participant has just estimated what percentage of supporters of \${outparty} agree with the following statement:
+Participant's estimate: ${estimate}%
 
-"Sometimes it is acceptable to violate democratic rules for the good of the country."
+Out-party: ${outparty}
 
-Participant's estimate: \${estimate}%
-
-The benchmark from a nationally representative survey is 24%.
-
-The conversation should follow this structure.
-
-The first assistant message must always:
-1. Thank the participant for providing their estimate.
-2. Restate the participant's estimate.
-3. Share the benchmark (24%).
-4. State only whether the participant overestimated, underestimated, or accurately estimated the benchmark. Do not describe the estimate as correct or incorrect. Present this as factual feedback rather than an evaluation.
-5. Ask one brief, open-ended question encouraging reflection on how they arrived at their estimate.
+Benchmark: 24%
 
 If the participant questions the benchmark:
 • Acknowledge that this is a reasonable question.
