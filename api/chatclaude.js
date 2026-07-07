@@ -177,6 +177,10 @@ console.log("KEY EXISTS:", !!process.env.ANTHROPIC_API_KEY);
 
     const data = await response.json();
 
+    console.log("STATUS:", response.status);
+console.log("ANTHROPIC RESPONSE:");
+console.log(JSON.stringify(data, null, 2));
+    
     if (!response.ok) {
 
       console.error(data);
