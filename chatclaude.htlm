@@ -152,7 +152,7 @@
 
   try {
 
-    const res = await fetch("/api/claude_chat", {
+    const res = await fetch("/api/chatclaude", {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
@@ -208,7 +208,7 @@
       lockChat();
 
       try {
-        const res = await fetch("/api/claude_chat", {
+        const res = await fetch("/api/chatclaude", {
           method: "POST",
           headers: {
             "Content-Type": "application/json"
