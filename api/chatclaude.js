@@ -168,7 +168,6 @@ console.log("KEY EXISTS:", !!process.env.ANTHROPIC_API_KEY);
         body: JSON.stringify({
           model: "claude-sonnet-5",
           max_tokens: 250,
-          temperature: 0.4,
           system: prompt,
           messages
         })
