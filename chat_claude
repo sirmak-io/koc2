@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Civic Chat</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 20px;
+      background: #ffffff;
+    }
+
+    #chat {
+      height: 420px;
+      border: 1px solid #dcdcdc;
+      border-radius: 12px;
+      padding: 12px;
+      overflow-y: auto;
+      background: #fafafa;
+      margin-bottom: 12px;
+    }
+
+    .msg {
+      margin: 10px 0;
+      padding: 10px 12px;
+      border-radius: 10px;
+      max-width: 75%;
+      line-height: 1.4;
+      white-space: pre-wrap;
+    }
+
+    .bot {
+      background: #f1f1f1;
+      color: #222;
+    }
+
+    .user {
+      background: #dbeafe;
+      color: #111;
+      margin-left: auto;
+      text-align: right;
+    }
+
+    .row {
+      display: flex;
+      gap: 8px;
+    }
+
+    #input {
+      flex: 1;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      font-size: 14px;
+    }
+
+    button {
+      padding: 10px 14px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+
+    #sendBtn {
+      background: #2563eb;
+      color: white;
+    }
+
+    #sendBtn:disabled,
+    #input:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+  </style>
+</head>
+<body>
+  <div id="chat"></div>
+
+  <div class="row">
+    <input id="input" type="text" placeholder="Mesajınızı yazın">
+    <button id="sendBtn">Gönder</button>
+  </div>
+
+  <script>
+    const chat = document.getElementById("chat");
+    const input = document.getElementById("input");
+    const sendBtn = document.getElementById("sendBtn");
+
+    const params = new URLSearchParams(window.location.search);
+    const participantId = params.get("pid");
+    const inparty = params.get("inparty");
+    const outparty = params.get("outparty");
+    const estimate = params.get("estimate");
+
+    let history = [];
+    let messageCount = 0;
+    const MAX_MESSAGES = 3;
+    let isWaiting = false;
+    let chatFinished = false;
+
+    function addMessage(role, text) {
+      const div = document.createElement("div");
+      div.className = "msg " + role;
+      div.textContent = text;
+      chat.appendChild(div);
+      chat.scrollTop = chat.scrollHeight;
+    }
+
+    function lockChat() {
+      input.disabled = true;
+      sendBtn.disabled = true;
+    }
+
+    function unlockChat() {
+      if (chatFinished) return;
+      input.disabled = false;
+      sendBtn.disabled = false;
+      input.focus();
+    }
+
+    function notifyQualtricsChatComplete() {
+      try {
+        window.parent.postMessage(
+          {
+            type: "chatComplete",
+            participantId: participantId,
+            inparty: inparty,
+            outparty: outparty,
+            estimate: estimate,
+            history: history
+          },
+          "*"
+        );
+      } catch (e) {
+        console.error("postMessage error:", e);
+      }
+    }
+
+    function finishChat() {
+  if (chatFinished) return;
+  chatFinished = true;
+  lockChat();
+  notifyQualtricsChatComplete();
+}
+
+   async function loadFirstMessage() {
+
+  isWaiting = true;
+  lockChat();
+
+  try {
+
+    const res = await fetch("/api/claude_chat", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        message: "",
+        participantId,
+        inparty,
+        outparty,
+        estimate,
+        history
+      })
+    });
+
+    const data = await res.json();
+
+    const reply = data.reply || "Üzgünüm, şu anda cevap üretemedim.";
+
+    addMessage("bot", reply);
+
+    history.push({
+      role: "assistant",
+      content: reply
+    });
+
+    unlockChat();
+
+  } catch (err) {
+
+    addMessage("bot", "Bağlantı hatası oluştu.");
+    console.error(err);
+
+  } finally {
+
+    isWaiting = false;
+
+  }
+
+} 
+    
+    async function sendMessage() {
+      if (isWaiting || chatFinished) return;
+
+      const text = input.value.trim();
+      if (!text) return;
+
+      addMessage("user", text);
+      history.push({ role: "user", content: text });
+      input.value = "";
+      messageCount += 1;
+
+      isWaiting = true;
+      lockChat();
+
+      try {
+        const res = await fetch("/api/claude_chat", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({
+            message: text,
+            participantId: participantId,
+            inparty: inparty,
+            outparty: outparty,
+            estimate: estimate,
+            history: history
+          })
+        });
+
+        const data = await res.json();
+        const reply = data.reply || "Üzgünüm, şu anda cevap üretemedim.";
+
+        addMessage("bot", reply);
+        history.push({ role: "assistant", content: reply });
+
+        if (messageCount >= MAX_MESSAGES) {
+          finishChat();
+        } else {
+          unlockChat();
+        }
+      } catch (err) {
+        addMessage("bot", "Bağlantı hatası oluştu. Lütfen tekrar deneyin.");
+        console.error(err);
+        unlockChat();
+      } finally {
+        isWaiting = false;
+      }
+    }
+
+   loadFirstMessage();
+
+sendBtn.addEventListener("click", sendMessage);
+
+input.addEventListener("keydown", function (e) {
+  if (e.key === "Enter") {
+    e.preventDefault();
+    sendMessage();
+  }
+});
+  </script>
+</body>
+</html>
