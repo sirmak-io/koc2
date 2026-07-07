@@ -183,10 +183,12 @@ Do not conclude the conversation.
 
     }
 
-    return res.status(200).json({
-      reply: data.content[0].text
-    });
-
+   return res.status(200).json({
+  reply: data.content
+    .filter(x => x.type === "text")
+    .map(x => x.text)
+    .join("")
+});
   } catch (err) {
 
     console.error(err);
