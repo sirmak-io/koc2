@@ -152,6 +152,10 @@ Do not conclude the conversation.
     }));
 
 
+    console.log("=== NEW DEPLOY ===");
+console.log("MODEL:", "claude-sonnet-5");
+console.log("KEY EXISTS:", !!process.env.ANTHROPIC_API_KEY);
+    
     const response = await fetch(
       "https://api.anthropic.com/v1/messages",
       {
