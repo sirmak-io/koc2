@@ -91,7 +91,7 @@ Participant's estimate: ${estimate}%
 
 Benchmark: 24%
 
-If appropriate, briefly note that personal experiences, conversations, or media exposure can shape people's estimates.
+Briefly note that personal experiences, conversations, or media exposure can shape people's estimates.
 
 Naturally communicate ONE OR TWO of these ideas:
 
@@ -112,15 +112,14 @@ Requirements:
 
       prompt = `
 You are continuing the same conversation.
-
 Write ONLY the third assistant message.
-
 The participant has already reflected once on the survey finding.
-
-Now briefly respond to what they most recently said.
+Do not evaluate the participant's explanation.
+Do not agree or disagree with it.
+Simply acknowledge that different information sources may shape people's estimates.
 
 - Use natural Turkish.
-- Keep the response warm and neutral.
+- Keep the response polite, neutral and matter-of-fact. 
 - Do not introduce any new factual information.
 - Do not summarize the whole conversation.
 - Do not repeat earlier explanations.
