@@ -165,351 +165,191 @@ let chatFinished = false;
 function addMessage(role, text) {
     const div = document.createElement("div");
     div.className = "msg " + role;
-
     if (role === "bot") {
         div.innerHTML = text;
     } else {
         div.textContent = text;
     }
-
     chat.appendChild(div);
-
     chat.scrollTop = chat.scrollHeight;
 }
 
-
 function lockChat(){
-
     input.disabled=true;
-
     sendBtn.disabled=true;
 
 }
-
-
-
 function unlockChat(){
-
     if(chatFinished)return;
-
     input.disabled=false;
-
     sendBtn.disabled=false;
-
     input.focus();
-
 }
   // ----------------------------------------------------
 // Notify Qualtrics when conversation finishes
 // ----------------------------------------------------
-
 function notifyQualtricsChatComplete(){
-
     try{
-
         window.parent.postMessage(
-
             {
-
                 type:"chatComplete",
-
                 participantId,
-
                 party,
-
                 inparty,
-
                 outparty,
-
                 guessPoll,
-
                 guessCourt,
-
                 guessAssault,
-
                 reasoning,
-
                 history
-
             },
-
             "*"
-
         );
-
     }
-
     catch(e){
-
         console.error("postMessage error:",e);
-
     }
-
 }
-
-
-
 // ----------------------------------------------------
 // Finish chat
 // ----------------------------------------------------
-
 function finishChat(){
-
     if(chatFinished) return;
-
     chatFinished=true;
-
     lockChat();
-
     notifyQualtricsChatComplete();
-
 }
-
-
-
 // ----------------------------------------------------
 // Load opening message
 // ----------------------------------------------------
-
 async function loadFirstMessage(){
-
     isWaiting=true;
-
     lockChat();
-
     try{
-
         const response = await fetch(
-
             "/api/claude_us",
-
             {
-
                 method:"POST",
-
                 headers:{
-
                     "Content-Type":"application/json"
-
                 },
-
                 body:JSON.stringify({
-
                     firstTurn:true,
-
                     participantId,
-
                     party,
-
                     inparty,
-
                     outparty,
-
                     guessPoll,
-
                     guessCourt,
-
                     guessAssault,
-
                     reasoning,
-
                     history
-
                 })
-
             }
-
         );
-
-
-
+        
         const data = await response.json();
 
-
-
         const reply =
-
             data.reply ||
-
             "I'm sorry, I couldn't generate a response.";
-
-
-
         addMessage("bot",reply);
-
-
-
         history.push({
-
             role:"assistant",
-
             content:reply
-
         });
-
-
-
         unlockChat();
-
     }
 
     catch(error){
-
         console.error(error);
-
-
-
         addMessage(
-
             "bot",
-
             "Connection error. Please refresh the page and try again."
-
         );
-
     }
-
     finally{
-
         isWaiting=false;
-
     }
-
 }
   // ----------------------------------------------------
 // Send participant message
 // ----------------------------------------------------
-
 async function sendMessage() {
-
     if (isWaiting || chatFinished) return;
-
     const text = input.value.trim();
-
     if (!text) return;
-
     addMessage("user", text);
 
     history.push({
         role: "user",
         content: text
     });
-
     input.value = "";
-
     messageCount++;
-
     isWaiting = true;
-
     lockChat();
-
     try {
-
         const response = await fetch("/api/claude_us", {
-
             method: "POST",
-
             headers: {
                 "Content-Type": "application/json"
             },
 
             body: JSON.stringify({
-
                 firstTurn: false,
-
                 participantId,
-
                 party,
-
                 inparty,
-
                 outparty,
-
                 guessPoll,
-
                 guessCourt,
-
                 guessAssault,
-
                 reasoning,
-
                 history
-
             })
-
         });
 
         const data = await response.json();
-
         const reply =
             data.reply ||
             "I'm sorry, I couldn't generate a response.";
-
         addMessage("bot", reply);
-
         history.push({
-
             role: "assistant",
-
             content: reply
-
         });
 
         if (messageCount >= MAX_USER_MESSAGES) {
-
             finishChat();
-
         } else {
-
             unlockChat();
-
         }
-
     } catch (error) {
-
         console.error(error);
-
         addMessage(
             "bot",
             "Connection error. Please try again."
         );
-
         unlockChat();
-
     } finally {
-
         isWaiting = false;
-
     }
-
 }
-
-
-
+    
 // ----------------------------------------------------
 // Initialize chat
 // ----------------------------------------------------
-
 document.addEventListener("DOMContentLoaded", () => {
-
     loadFirstMessage();
-
     sendBtn.addEventListener("click", sendMessage);
-
     input.addEventListener("keydown", function (e) {
-
         if (e.key === "Enter") {
-
             e.preventDefault();
-
             sendMessage();
-
         }
-
     });
-
 });
-
 </script>
 
 </body>
