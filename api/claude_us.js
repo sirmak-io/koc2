@@ -70,9 +70,10 @@ function buildOpeningMessage(data) {
       `Across the three items, your estimates were on average the same as the actual figures.`;
   }
 
-
   return `
 <p>Thanks for completing those estimates.</p>
+
+<div class="comparison">
 
 <p>Below is a comparison between your estimates and responses from a national survey of Americans.</p>
 
@@ -104,12 +105,13 @@ function buildOpeningMessage(data) {
 
 </table>
 
-<p>
-Overall, your estimates were, on average,
+<div class="summary">
+On average, your estimates were
 <strong>${Math.abs(data.averageGap)} percentage points ${data.overallDirection}</strong>
 than the survey responses.
-</p>
+</div>
 
+</div>
 <p><strong>Before I say more:</strong></p>
 
 <p>What are your first thoughts after seeing this comparison?</p>
