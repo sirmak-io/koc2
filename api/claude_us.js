@@ -1,92 +1,321 @@
 export default async function handler(req, res) {
 
-  if (req.method !== "POST") {
-    return res.status(405).json({
-      error: "Method not allowed"
-    });
-  }
+// ============================================================
+// api/claude_us.js
+// AI-Personalized Misperception Correction Experiment
+// ============================================================
 
-  try {
 
-    const {
-  history = [],
-  participantId,
-  party,
-  inparty,
-  outparty,
-  guessPoll,
-  guessCourt,
-  guessAssault,
-  reasoning
-} = req.body;
+// ------------------------------------------------------------
+// Configuration
+// ------------------------------------------------------------
 
-    const benchmarks = {
+const ANTHROPIC_API_KEY = process.env.ANTHROPIC_API_KEY;
+
+const MODEL = "claude-sonnet-5";
+
+const MAX_TOKENS = 250;
+
+const TEMPERATURE = 0.4;
+
+
+
+// ------------------------------------------------------------
+// Holliday et al. (2024) benchmark values
+// ------------------------------------------------------------
+
+const BENCHMARKS = {
+
   Democrat: {
     poll: 9.2,
     court: 14.6,
     assault: 3.6
   },
+
   Republican: {
     poll: 8.8,
     court: 11.5,
     assault: 2.6
   }
+
 };
 
-const actual = benchmarks[party];
 
-    const gapPoll = guessPoll - actual.poll;
-const gapCourt = guessCourt - actual.court;
-const gapAssault = guessAssault - actual.assault;
 
-const averageGap =
-  (gapPoll + gapCourt + gapAssault) / 3;
+// ------------------------------------------------------------
+// Helper functions
+// ------------------------------------------------------------
 
-const direction =
-  averageGap >= 0 ? "higher" : "lower";
-    
-    const assistantTurns = history.filter(
-      m => m.role === "assistant"
-    ).length;
+function difference(estimate, actual) {
+  return Number((estimate - actual).toFixed(1));
+}
 
-    // ---------- FIRST ASSISTANT MESSAGE ----------
 
-    const value = Number(estimate);
+function average(values) {
+  return Number(
+    (
+      values.reduce((a, b) => a + b, 0) /
+      values.length
+    ).toFixed(1)
+  );
+}
 
-    let comparison;
 
-    if (value > 24) {
-      comparison =
-        "Bu, araştırmada bulunan değerden daha yüksek bir tahminde bulunduğunuz anlamına geliyor.";
-    } else if (value < 24) {
-      comparison =
-        "Bu, araştırmada bulunan değerden daha düşük bir tahminde bulunduğunuz anlamına geliyor.";
-    } else {
-      comparison =
-        "Tahmininiz araştırmada bulunan değerle aynıdır.";
-    }
+function overallDirection(avgGap) {
 
-    if (assistantTurns === 0) {
+  if (avgGap > 0) return "higher";
 
-      return res.status(200).json({
-        reply:
-`Tahmininiz için teşekkür ederim. Siz %${estimate} tahmin ettiniz. Araştırmada bulunan oran %24'tür. ${comparison}
+  if (avgGap < 0) return "lower";
 
-Bu tahmini yaparken sizi en çok hangi bilgi veya deneyim etkiledi?`
-      });
+  return "same";
 
-    }
+}
 
-    // ---------- FINAL MESSAGE ----------
 
-    if (assistantTurns >= 3) {
+function directionLabel(estimate, actual) {
 
-      return res.status(200).json({
-        reply:
-`Düşüncelerinizi paylaştığınız için teşekkür ederim. Araştırmamıza katkınız bizim için değerli. Lütfen anketin sonraki bölümüne devam ediniz.`
-      });
+  const diff = estimate - actual;
 
-    }
+  if (diff > 5) return "OVERESTIMATED";
+
+  if (diff < -5) return "UNDERESTIMATED";
+
+  return "CLOSE";
+
+}
+
+
+
+// ------------------------------------------------------------
+// Platform-generated opening message
+// (Claude is NOT called)
+// ------------------------------------------------------------
+
+function buildOpeningMessage(data) {
+
+  let summary;
+
+  if (data.overallDirection === "higher") {
+
+    summary =
+      `Across the three items, your estimates were on average ${Math.abs(data.averageGap)} percentage points higher than the actual figures.`;
+
+  }
+
+  else if (data.overallDirection === "lower") {
+
+    summary =
+      `Across the three items, your estimates were on average ${Math.abs(data.averageGap)} percentage points lower than the actual figures.`;
+
+  }
+
+  else {
+
+    summary =
+      `Across the three items, your estimates were on average the same as the actual figures.`;
+
+  }
+
+
+  let reflectionQuestion;
+
+  if (data.overallDirection === "same") {
+
+    reflectionQuestion =
+      "Before I say more: what do you think helped you arrive at estimates that were so close to the actual numbers?";
+
+  }
+
+  else {
+
+    reflectionQuestion =
+      "Before I say more: what do you think is behind the gap between your estimates and the actual numbers?";
+
+  }
+
+
+  return `Thanks for completing those estimates. Here's what national survey data shows about how ${data.outparty} supporters actually answered the same questions:
+
+Reducing polling stations:
+your estimate ${data.guessPoll}% — actual ${data.actualPoll}%
+
+Ignoring court decisions:
+your estimate ${data.guessCourt}% — actual ${data.actualCourt}%
+
+Assaulting political opponents:
+your estimate ${data.guessAssault}% — actual ${data.actualAssault}%
+
+${summary}
+
+This pattern—overestimating how much the other side endorses these kinds of actions—is something national surveys find for most Americans, in both parties. The figures come from a 2022 survey of about 45,000 Americans (Holliday et al., 2024).
+
+${reflectionQuestion}`;
+
+}
+
+
+
+// ------------------------------------------------------------
+// Platform-generated closing message
+// ------------------------------------------------------------
+
+const CLOSING_MESSAGE =
+  "Thanks for thinking this through with me — I'll hand you back to the survey now.";
+
+
+
+// ============================================================
+// API
+// ============================================================
+
+export default async function handler(req, res) {
+
+  if (req.method !== "POST") {
+
+    return res.status(405).json({
+      error: "Method not allowed"
+    });
+
+  }
+
+
+  const {
+
+    history = [],
+
+    participantId,
+
+    party,
+
+    inparty,
+
+    outparty,
+
+    guessPoll,
+
+    guessCourt,
+
+    guessAssault,
+
+    reasoning
+
+  } = req.body;
+
+
+
+  // ----------------------------------------------------------
+  // Select benchmark values
+  // Democrat respondents estimate Republicans
+  // Republican respondents estimate Democrats
+  // ----------------------------------------------------------
+
+  const actual =
+    party === "Democrat"
+      ? BENCHMARKS.Republican
+      : BENCHMARKS.Democrat;
+
+
+
+  // ----------------------------------------------------------
+  // Compute participant-specific quantities
+  // ----------------------------------------------------------
+
+  const gapPoll = difference(guessPoll, actual.poll);
+
+  const gapCourt = difference(guessCourt, actual.court);
+
+  const gapAssault = difference(guessAssault, actual.assault);
+
+
+  const avgGap = average([
+    gapPoll,
+    gapCourt,
+    gapAssault
+  ]);
+
+
+  const participantData = {
+
+    participantId,
+
+    party,
+
+    inparty,
+
+    outparty,
+
+    reasoning,
+
+    guessPoll,
+
+    guessCourt,
+
+    guessAssault,
+
+    actualPoll: actual.poll,
+
+    actualCourt: actual.court,
+
+    actualAssault: actual.assault,
+
+    gapPoll,
+
+    gapCourt,
+
+    gapAssault,
+
+    averageGap: avgGap,
+
+    overallDirection: overallDirection(avgGap),
+
+    dirPoll: directionLabel(guessPoll, actual.poll),
+
+    dirCourt: directionLabel(guessCourt, actual.court),
+
+    dirAssault: directionLabel(guessAssault, actual.assault)
+
+  };
+
+
+  // ----------------------------------------------------------
+  // Count assistant messages
+  // ----------------------------------------------------------
+
+  const assistantTurns = history.filter(
+    m => m.role === "assistant"
+  ).length;
+
+
+  // ----------------------------------------------------------
+  // First message (platform generated)
+  // ----------------------------------------------------------
+
+  if (assistantTurns === 0) {
+
+    return res.json({
+      reply: buildOpeningMessage(participantData)
+    });
+
+  }
+
+
+  // ----------------------------------------------------------
+  // End conversation after three assistant replies
+  // ----------------------------------------------------------
+
+  if (assistantTurns >= 3) {
+
+    return res.json({
+      reply: CLOSING_MESSAGE
+    });
+
+  }
+
+
+  // ==========================================================
+  // PART 2 STARTS HERE
+  // Build the Appendix A system prompt and call Claude Sonnet 5
+  // ==========================================================
 
     // ---------- SYSTEM PROMPT ----------
 
