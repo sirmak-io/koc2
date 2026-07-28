@@ -9,10 +9,16 @@ export default async function handler(req, res) {
   try {
 
     const {
-      history = [],
-      estimate,
-      outparty
-    } = req.body;
+  history = [],
+  participantId,
+  party,
+  inparty,
+  outparty,
+  guessPoll,
+  guessCourt,
+  guessAssault,
+  reasoning
+} = req.body;
 
     const assistantTurns = history.filter(
       m => m.role === "assistant"
