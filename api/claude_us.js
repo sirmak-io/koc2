@@ -8,7 +8,6 @@
 const ANTHROPIC_API_KEY = process.env.ANTHROPIC_API_KEY;
 const MODEL = "claude-sonnet-5";
 const MAX_TOKENS = 250;
-const TEMPERATURE = 0.4;
 
 // ------------------------------------------------------------
 // Holliday et al. (2024) benchmark values
@@ -367,7 +366,6 @@ try {
             body: JSON.stringify({
                 model: MODEL,
                 max_tokens: MAX_TOKENS,
-                temperature: TEMPERATURE,
                 system: prompt,
                 messages
             })
