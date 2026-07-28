@@ -84,18 +84,33 @@
   </div>
 
   <script>
-   const params = new URLSearchParams(window.location.search);
+  const params = new URLSearchParams(window.location.search);
 
-console.log("PID:", params.get("pid"));
-console.log("Party:", params.get("party"));
-console.log("Inparty:", params.get("inparty"));
-console.log("Outparty:", params.get("outparty"));
+// Participant information
+const participantId = params.get("pid");
+const party = params.get("party");
+const inparty = params.get("inparty");
+const outparty = params.get("outparty");
 
-console.log("Poll:", params.get("guess_poll"));
-console.log("Court:", params.get("guess_court"));
-console.log("Assault:", params.get("guess_assault"));
+// Estimation block responses
+const guessPoll = Number(params.get("guess_poll"));
+const guessCourt = Number(params.get("guess_court"));
+const guessAssault = Number(params.get("guess_assault"));
 
-console.log("Reasoning:", params.get("reasoning"));
+// Open-ended explanation
+const reasoning = params.get("reasoning");
+
+// Temporary debugging
+console.log({
+  participantId,
+  party,
+  inparty,
+  outparty,
+  guessPoll,
+  guessCourt,
+  guessAssault,
+  reasoning
+});
     
     let history = [];
     let messageCount = 0;
