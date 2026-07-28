@@ -378,6 +378,8 @@ try {
         const errorText = await response.text();
         console.error("Anthropic API Error:");
         console.error(errorText);
+      console.error("RAW ERROR:");
+console.error(JSON.stringify(errorText, null, 2));
         return res.status(response.status).json({
             error: errorText
         });
