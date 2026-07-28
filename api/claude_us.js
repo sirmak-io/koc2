@@ -110,7 +110,7 @@ than the survey responses.
 </div>
 
 <p class="reflection">
-Before I say more:</strong> What are your first thoughts after seeing this comparison?
+Before I say more:</strong> What are your first thoughts after seeing this comparison?</strong>
 </p>
 `;
 }
