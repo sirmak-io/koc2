@@ -1,150 +1,98 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-
 <meta charset="UTF-8">
-
 <meta name="viewport" content="width=device-width, initial-scale=1">
-
 <title>Civic Chat</title>
-
 <style>
-
 body{
     font-family:Arial,sans-serif;
     margin:0;
     padding:20px;
     background:#ffffff;
 }
-
 #chat{
-
     height:420px;
-
     border:1px solid #dcdcdc;
-
     border-radius:12px;
-
     padding:12px;
-
     overflow-y:auto;
-
     background:#fafafa;
-
     margin-bottom:12px;
-
 }
-
 .msg{
-
     margin:10px 0;
-
     padding:10px 12px;
-
     border-radius:10px;
-
     max-width:75%;
-
     line-height:1.45;
-
     white-space:pre-wrap;
-
-}
-
-.bot{
-
-    background:#f1f1f1;
-
-    color:#222;
-
 }
 
 .user{
-
     background:#dbeafe;
-
     color:#111;
-
     margin-left:auto;
-
     text-align:right;
-
 }
 
 .row{
-
     display:flex;
-
     gap:8px;
-
 }
 
 #input{
-
     flex:1;
-
     padding:10px;
-
     border:1px solid #ccc;
-
     border-radius:8px;
-
     font-size:14px;
-
 }
 
 button{
-
     padding:10px 14px;
-
     border:none;
-
     border-radius:8px;
-
     cursor:pointer;
-
 }
 
 #sendBtn{
-
     background:#2563eb;
-
     color:white;
-
 }
-
 #sendBtn:disabled,
 #input:disabled{
-
     opacity:.6;
-
     cursor:not-allowed;
-
 }
-    .bot table {
-    width: 100%;
-    border-collapse: collapse;
-    margin: 12px 0;
-    font-size: 14px;
+.bot{
+    background:#f1f1f1;
+    color:#222;
+    max-width:95%;
 }
-
+.bot p{
+    margin:4px 0;
+}
+.bot table{
+    width:100%;
+    border-collapse:collapse;
+    margin:6px 0;
+    font-size:14px;
+}
 .bot th,
-.bot td {
-    border: 1px solid #d9d9d9;
-    padding: 8px;
+.bot td{
+    border:1px solid #d9d9d9;
+    padding:6px 8px;
 }
-
-.bot th {
-    background: #f5f5f5;
-    text-align: left;
+.bot th{
+    background:#f5f5f5;
+    font-weight:bold;
+    text-align:left;
 }
-
 .bot td:nth-child(2),
-.bot td:nth-child(3) {
-    text-align: center;
+.bot td:nth-child(3){
+    text-align:center;
 }
-
 </style>
 
 </head>
@@ -161,64 +109,42 @@ type="text"
 placeholder="Type your message...">
 
 <button id="sendBtn">
-
 Send
-
 </button>
 
 </div>
 
 <script>
 
-
 // ----------------------------------------------------
 // Participant information passed from Qualtrics
 // ----------------------------------------------------
 
 const params = new URLSearchParams(window.location.search);
-
 const participantId = params.get("pid");
-
 const party = params.get("party");
-
 const inparty = params.get("inparty");
-
 const outparty = params.get("outparty");
-
 const guessPoll = Number(params.get("guess_poll"));
-
 const guessCourt = Number(params.get("guess_court"));
-
 const guessAssault = Number(params.get("guess_assault"));
-
 const reasoning = params.get("reasoning");
-
-
 
 // ----------------------------------------------------
 // Conversation state
 // ----------------------------------------------------
 
 const history = [];
-
 let messageCount = 0;
-
 const MAX_USER_MESSAGES = 3;
-
 let isWaiting = false;
-
 let chatFinished = false;
-
-
 
 // ----------------------------------------------------
 // UI helpers
 // ----------------------------------------------------
-
 function addMessage(role, text) {
-
     const div = document.createElement("div");
-
     div.className = "msg " + role;
 
     if (role === "bot") {
