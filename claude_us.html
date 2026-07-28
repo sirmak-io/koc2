@@ -84,16 +84,19 @@
   </div>
 
   <script>
-    const chat = document.getElementById("chat");
-    const input = document.getElementById("input");
-    const sendBtn = document.getElementById("sendBtn");
+   const params = new URLSearchParams(window.location.search);
 
-    const params = new URLSearchParams(window.location.search);
-    const participantId = params.get("pid");
-    const inparty = params.get("inparty");
-    const outparty = params.get("outparty");
-    const estimate = params.get("estimate");
+console.log("PID:", params.get("pid"));
+console.log("Party:", params.get("party"));
+console.log("Inparty:", params.get("inparty"));
+console.log("Outparty:", params.get("outparty"));
 
+console.log("Poll:", params.get("guess_poll"));
+console.log("Court:", params.get("guess_court"));
+console.log("Assault:", params.get("guess_assault"));
+
+console.log("Reasoning:", params.get("reasoning"));
+    
     let history = [];
     let messageCount = 0;
     const MAX_MESSAGES = 3;
