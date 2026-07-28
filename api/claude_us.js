@@ -73,7 +73,7 @@ function buildOpeningMessage(data) {
   return `
 <p>Thanks for completing those estimates.</p>
 
-<p>Below is a comparison between your estimates and responses from a national survey of Americans.</p>
+<p>The table below compares your estimates with responses from a national survey of Americans.</p>
 
 <table>
 
@@ -110,7 +110,7 @@ than the survey responses.
 </div>
 
 <p class="reflection">
-<strong>Before I say more:</strong> What are your first thoughts after seeing this comparison?
+Before I say more:</strong> What are your first thoughts after seeing this comparison?
 </p>
 `;
 }
