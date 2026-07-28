@@ -109,7 +109,6 @@ On average, your estimates were
 than the survey responses.
 </div>
 
-</div>
 <p class="reflection">
 <strong>Before I say more:</strong> What are your first thoughts after seeing this comparison?
 </p>
