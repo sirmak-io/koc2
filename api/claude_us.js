@@ -50,6 +50,22 @@ function directionLabel(estimate, actual) {
   if (diff < -5) return "UNDERESTIMATED";
   return "CLOSE";
 }
+function addMessage(role, text) {
+
+    const div = document.createElement("div");
+
+    div.className = "msg " + role;
+
+    if (role === "bot") {
+        div.innerHTML = text;
+    } else {
+        div.textContent = text;
+    }
+
+    chat.appendChild(div);
+
+    chat.scrollTop = chat.scrollHeight;
+}
 
 // ------------------------------------------------------------
 // Platform-generated opening message
