@@ -73,8 +73,6 @@ function buildOpeningMessage(data) {
   return `
 <p>Thanks for completing those estimates.</p>
 
-<div class="comparison">
-
 <p>Below is a comparison between your estimates and responses from a national survey of Americans.</p>
 
 <table>
