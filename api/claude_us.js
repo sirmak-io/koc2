@@ -70,61 +70,52 @@ function buildOpeningMessage(data) {
       `Across the three items, your estimates were on average the same as the actual figures.`;
   }
 
-  let reflectionQuestion;
-  if (data.overallDirection === "same") {
-    reflectionQuestion =
-      "Before I say more: what do you think helped you arrive at estimates that were so close to the actual numbers?";
-  }
-  else {
-    reflectionQuestion =
-      "Before I say more: what do you think is behind the gap between your estimates and the actual numbers?";
-  }
 
   return `
 <p>Thanks for completing those estimates.</p>
 
-<p>Here's what a national survey found about <b>${data.outparty}</b> supporters.</p>
+<p>Below is a comparison between your estimates and responses from a national survey of Americans.</p>
 
 <table>
 
 <tr>
 <th>Question</th>
 <th>Your estimate</th>
-<th>Actual</th>
+<th>National survey</th>
 </tr>
 
 <tr>
 <td>Reducing polling stations</td>
-<td><b>${data.guessPoll}%</b></td>
+<td><strong>${data.guessPoll}%</strong></td>
 <td>${data.actualPoll}%</td>
 </tr>
 
 <tr>
 <td>Ignoring court decisions</td>
-<td><b>${data.guessCourt}%</b></td>
+<td><strong>${data.guessCourt}%</strong></td>
 <td>${data.actualCourt}%</td>
 </tr>
 
 <tr>
 <td>Assaulting political opponents</td>
-<td><b>${data.guessAssault}%</b></td>
+<td><strong>${data.guessAssault}%</strong></td>
 <td>${data.actualAssault}%</td>
 </tr>
 
 </table>
 
 <p>
-Overall, your estimates were on average
-<b>${Math.abs(data.averageGap)} percentage points ${data.overallDirection}</b>
-than the survey results.
+Overall, your estimates were, on average,
+<strong>${Math.abs(data.averageGap)} percentage points ${data.overallDirection}</strong>
+than the survey responses.
 </p>
 
-<p><b>Before I say more:</b></p>
+<p><strong>Before I say more:</strong></p>
 
-<p>${reflectionQuestion}</p>
+<p>What are your first thoughts after seeing this comparison?</p>
 `;
-
 }
+
 
 // ------------------------------------------------------------
 // Platform-generated closing message
