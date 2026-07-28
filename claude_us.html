@@ -170,19 +170,23 @@ console.log({
 
   try {
 
-    const res = await fetch("/api/chatclaude", {
+    const res = await fetch("/api/claude_us", {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
       },
       body: JSON.stringify({
-        message: "",
-        participantId,
-        inparty,
-        outparty,
-        estimate,
-        history
-      })
+  message: "",
+  participantId,
+  party,
+  inparty,
+  outparty,
+  guessPoll,
+  guessCourt,
+  guessAssault,
+  reasoning,
+  history
+})
     });
 
     const data = await res.json();
@@ -226,19 +230,23 @@ console.log({
       lockChat();
 
       try {
-        const res = await fetch("/api/chatclaude", {
+        const res = await fetch("/api/claude_us", {
           method: "POST",
           headers: {
             "Content-Type": "application/json"
           },
           body: JSON.stringify({
-            message: text,
-            participantId: participantId,
-            inparty: inparty,
-            outparty: outparty,
-            estimate: estimate,
-            history: history
-          })
+  message: text,
+  participantId,
+  party,
+  inparty,
+  outparty,
+  guessPoll,
+  guessCourt,
+  guessAssault,
+  reasoning,
+  history
+})
         });
 
         const data = await res.json();
