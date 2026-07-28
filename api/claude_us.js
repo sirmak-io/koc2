@@ -20,6 +20,31 @@ export default async function handler(req, res) {
   reasoning
 } = req.body;
 
+    const benchmarks = {
+  Democrat: {
+    poll: 9.2,
+    court: 14.6,
+    assault: 3.6
+  },
+  Republican: {
+    poll: 8.8,
+    court: 11.5,
+    assault: 2.6
+  }
+};
+
+const actual = benchmarks[party];
+
+    const gapPoll = guessPoll - actual.poll;
+const gapCourt = guessCourt - actual.court;
+const gapAssault = guessAssault - actual.assault;
+
+const averageGap =
+  (gapPoll + gapCourt + gapAssault) / 3;
+
+const direction =
+  averageGap >= 0 ? "higher" : "lower";
+    
     const assistantTurns = history.filter(
       m => m.role === "assistant"
     ).length;
