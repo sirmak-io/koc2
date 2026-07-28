@@ -56,24 +56,11 @@ function directionLabel(estimate, actual) {
 // (Claude is NOT called)
 // ------------------------------------------------------------
 function buildOpeningMessage(data) {
-  let summary;
-  if (data.overallDirection === "higher") {
-    summary =
-      `Across the three items, your estimates were on average ${Math.abs(data.averageGap)} percentage points higher than the actual figures.`;
-  }
-  else if (data.overallDirection === "lower") {
-    summary =
-      `Across the three items, your estimates were on average ${Math.abs(data.averageGap)} percentage points lower than the actual figures.`;
-  }
-  else {
-    summary =
-      `Across the three items, your estimates were on average the same as the actual figures.`;
-  }
 
   return `
 <p>Thanks for completing those estimates.</p>
 
-<p>The table below compares your estimates of ${participantData.outparty} supporters' responses with their actual responses in a national survey of Americans.</p>
+<p>The table below compares your estimates of ${data.outparty} supporters' responses with their actual responses in a national survey of Americans.</p>
 
 <table>
 
