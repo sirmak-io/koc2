@@ -386,9 +386,12 @@ console.error(JSON.stringify(errorText, null, 2));
 
     const data = await response.json();
   console.log("ANTHROPIC DATA:", JSON.stringify(data, null, 2));
-    const reply =
-        data.content?.[0]?.text ??
-        "I'm sorry, something went wrong.";
+    const textBlock = data.content.find(
+    block => block.type === "text"
+);
+const reply =
+    textBlock?.text ??
+    "I'm sorry, something went wrong.";
     return res.json({
         reply
     });
