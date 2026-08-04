@@ -14,14 +14,14 @@ const MAX_TOKENS = 250;
 // ------------------------------------------------------------
 const BENCHMARKS = {
   Democrat: {
-    poll: 9.2,
-    court: 14.6,
-    assault: 3.6
+    poll: 9,
+    court: 15,
+    media: 18
   },
   Republican: {
-    poll: 8.8,
-    court: 11.5,
-    assault: 2.6
+    poll: 9,
+    court: 12,
+    media: 23
   }
 };
 // ------------------------------------------------------------
@@ -82,9 +82,9 @@ function buildOpeningMessage(data) {
 </tr>
 
 <tr>
-<td>Assaulting political opponents</td>
-<td><strong>${data.guessAssault}%</strong></td>
-<td>${data.actualAssault}%</td>
+<td>Censor partisan media</td>
+<td><strong>${data.guessMedia}%</strong></td>
+<td>${data.actualMedia}%</td>
 </tr>
 
 </table>
@@ -125,7 +125,7 @@ export default async function handler(req, res) {
     outparty,
     guessPoll,
     guessCourt,
-    guessAssault,
+    guessMedia,
     reasoning
 
   } = req.body;
@@ -146,11 +146,11 @@ export default async function handler(req, res) {
 
   const gapPoll = difference(guessPoll, actual.poll);
   const gapCourt = difference(guessCourt, actual.court);
-  const gapAssault = difference(guessAssault, actual.assault);
+  const gapMedia = difference(guessMedia, actual.media);
   const avgGap = average([
     gapPoll,
     gapCourt,
-    gapAssault
+    gapMedia
   ]);
 
   const participantData = {
@@ -161,18 +161,18 @@ export default async function handler(req, res) {
     reasoning,
     guessPoll,
     guessCourt,
-    guessAssault,
+    guessMedia,
     actualPoll: actual.poll,
     actualCourt: actual.court,
-    actualAssault: actual.assault,
+    actualMedia: actual.media,
     gapPoll,
     gapCourt,
-    gapAssault,
+    gapMedia,
     averageGap: avgGap,
     overallDirection: overallDirection(avgGap),
     dirPoll: directionLabel(guessPoll, actual.poll),
     dirCourt: directionLabel(guessCourt, actual.court),
-    dirAssault: directionLabel(guessAssault, actual.assault)
+    dirMedia: directionLabel(guessMedia, actual.media)
   };
 
   // ----------------------------------------------------------
@@ -232,11 +232,11 @@ Direction:
 ${participantData.dirCourt}
 
 
-Item 3 — Assaulting political opponents
-Estimate: ${participantData.guessAssault}%
-Actual: ${participantData.actualAssault}%
+Item 3 — Censor partisan media
+Estimate: ${participantData.guessMedia}%
+Actual: ${participantData.actualMedia}%
 Direction:
-${participantData.dirAssault}
+${participantData.dirMedia}
 
 Overall:
 Their estimates averaged
