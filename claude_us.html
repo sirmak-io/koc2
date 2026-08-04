@@ -153,7 +153,7 @@ const inparty = params.get("inparty");
 const outparty = params.get("outparty");
 const guessPoll = Number(params.get("guess_poll"));
 const guessCourt = Number(params.get("guess_court"));
-const guessAssault = Number(params.get("guess_assault"));
+const guessMedia = Number(params.get("guess_media"));
 const reasoning = params.get("reasoning");
 
 // ----------------------------------------------------
@@ -206,7 +206,7 @@ function notifyQualtricsChatComplete(){
                 outparty,
                 guessPoll,
                 guessCourt,
-                guessAssault,
+                guessMedia,
                 reasoning,
                 history
             },
@@ -248,7 +248,7 @@ async function loadFirstMessage(){
                     outparty,
                     guessPoll,
                     guessCourt,
-                    guessAssault,
+                    guessMedia,
                     reasoning,
                     history
                 })
@@ -311,7 +311,7 @@ async function sendMessage() {
                 outparty,
                 guessPoll,
                 guessCourt,
-                guessAssault,
+                guessMedia,
                 reasoning,
                 history
             })
