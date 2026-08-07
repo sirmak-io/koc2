@@ -283,7 +283,7 @@ The survey platform will display the closing message immediately after your repl
 </conversation_flow>
 
 <core_message>
-Support for actions like these is low among ordinary voters in BOTH parties.
+Support for actions like these is generally low among ordinary supporters of both parties.
 Most Americans overestimate how much supporters of the other party endorse these actions.
 These figures come from a large national survey.
 </core_message>
