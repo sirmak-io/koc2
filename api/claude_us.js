@@ -96,7 +96,7 @@ than the survey responses.
 </div>
 
 <p class="reflection">
-Now that you've seen the comparison, what stands out to you? <strong>What do you think explains the differences?</strong> For example, could they reflect social media, news coverage, personal experiences, or something else?
+Now that you've seen the comparison, what do you think explains the differences between your estimates and the survey results? For example, were your expectations shaped by social media, news coverage, personal experiences, conversations with others, or something else?
 </p>
 `;
 }
