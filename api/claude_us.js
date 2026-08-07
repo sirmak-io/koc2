@@ -96,7 +96,7 @@ than the survey responses.
 </div>
 
 <p class="reflection">
-Before I say more: <strong>What are your first thoughts after seeing this comparison?</strong>
+Now that you've seen the comparison, what stands out to you? <strong>What do you think explains the differences?</strong>
 </p>
 `;
 }
@@ -126,8 +126,7 @@ export default async function handler(req, res) {
     guessPoll,
     guessCourt,
     guessMedia,
-    reasoning
-
+  
   } = req.body;
 
   // ----------------------------------------------------------
@@ -158,7 +157,6 @@ export default async function handler(req, res) {
     party,
     inparty,
     outparty,
-    reasoning,
     guessPoll,
     guessCourt,
     guessMedia,
@@ -207,14 +205,11 @@ export default async function handler(req, res) {
 
 const prompt = `
 You are an AI survey assistant in an academic study of American political attitudes.
-Participants were told they may interact with an AI assistant.
 Your job in this section is to respond to the participant's thinking about why their estimates differed from the actual survey figures, deliver the core message, and close the conversation gracefully.
 <participant_data>
 
 The participant identifies as a ${participantData.inparty}.
 "The other party" refers to ${participantData.outparty}.
-Earlier in the survey, before seeing any benchmark information, the participant explained that they based their estimates on:
-"${participantData.reasoning}"
 
 They estimated the percentage of ${participantData.outparty} supporters who would endorse three actions.
 
