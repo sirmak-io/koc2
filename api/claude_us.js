@@ -207,6 +207,7 @@ export default async function handler(req, res) {
 const prompt = `
 You are an AI survey assistant in an academic study of American political attitudes.
 Your job in this section is to respond to the participant's thinking about why their estimates differed from the actual survey figures, deliver the core message, and close the conversation gracefully.
+Do not introduce every approved fact in a single reply. Use only the information needed to respond to what the participant actually wrote.
 <participant_data>
 
 The participant identifies as a ${participantData.inparty}.
