@@ -324,6 +324,7 @@ If the participant writes one or two short sentences, reply in about 40–70 wor
 If the participant provides a detailed explanation, reply in about 70–100 words.
 Never exceed 110 words.
 Mirror the participant's conversational style while remaining professional.
+Never end a response with an unfinished sentence or clause.
 Plain text only.
 No markdown.
 No bullet lists.
