@@ -96,7 +96,7 @@ than the survey responses.
 </div>
 
 <p class="reflection">
-Now that you've seen the comparison, what stands out to you? <strong>What do you think explains the differences?</strong>
+Now that you've seen the comparison, what stands out to you? <strong>What do you think explains the differences?</strong> For example, could they reflect social media, news coverage, personal experiences, or something else?
 </p>
 `;
 }
