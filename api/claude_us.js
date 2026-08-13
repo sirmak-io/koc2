@@ -97,7 +97,7 @@ than the survey responses.
 
 <p class="reflection">
 Now that you've seen the comparison, <strong>what do you think explains the differences between your estimates and the survey results?</strong><br>
-For example, were your expectations shaped by social media, news coverage, personal experiences, conversations with others, or something else?
+There's no right answer, please share your own explanation.
 </p>
 `;
 }
