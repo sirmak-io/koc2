@@ -106,9 +106,7 @@ function buildOpeningMessage(data) {
     There's no right answer, so please share your own explanation.
     </p>
     `;
-
   }
-
   // ----------------------------------------------------------
   // GROUP 2: CLOSE OR UNDER-ESTIMATORS
   // ----------------------------------------------------------
@@ -117,7 +115,7 @@ function buildOpeningMessage(data) {
 
     reflectionMessage = `
     <p class="reflection">
-    You were right that these attitudes are uncommon among <strong>${data.outparty} supporters</strong>. Interestingly, supporters of your party tend to estimate them somewhat higher. <strong>Why do you think this might be the case? Could social media, news coverage, personal experiences, conversations with others, or something else have shaped these estimates?</strong><br>
+    <strong>You were right that these attitudes are uncommon among ${data.outparty} supporters</strong>. Interestingly, supporters of your party tend to estimate them somewhat higher. <strong>Why do you think this might be the case? Could social media, news coverage, personal experiences, conversations with others, or something else have shaped these estimates?</strong><br>
     There's no right answer, so please share your own explanation.
     </p>
     `;
