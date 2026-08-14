@@ -64,7 +64,7 @@ function buildOpeningMessage(data) {
 <table>
 
 <tr>
-<th>Democratic norm violations</th>
+<th>Democratic norm statements</th>
 <th>Your estimate</th>
 <th>National survey</th>
 </tr>
