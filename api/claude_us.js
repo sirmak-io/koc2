@@ -96,7 +96,7 @@ than the survey responses.
 </div>
 
 <p class="reflection">
-Now that you've seen the comparison, <strong>what do you think explains the differences between your estimates and the survey results? Could social media, news coverage, personal experiences, conversations with others, or something else have influenced your estimate?</strong><br>
+Now that you've seen the comparison, <strong>what do you think explains the differences between your estimates and the survey results? Could social media, news coverage, personal experiences, conversations with others, or something else?</strong><br>
 There's no right answer, please share your own explanation.
 </p>
 `;
