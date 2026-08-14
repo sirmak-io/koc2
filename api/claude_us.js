@@ -59,7 +59,7 @@ function buildOpeningMessage(data) {
   return `
 <p>Thanks for completing those estimates.</p>
 
-<p>The table below compares your estimates of ${data.outparty} supporters' responses with their actual survey responses.</p>
+<p>The table below compares your estimates with the actual survey responses of ${data.outparty} supporters.</p>
 
 <table>
 
