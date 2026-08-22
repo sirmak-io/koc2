@@ -124,16 +124,16 @@ function buildOpeningMessage(data) {
 
 
   return `
-  <p>Thanks for completing those estimates.</p>
+  <p>Thanks for your guesses!</p>
 
-  <p>The table below compares your estimates with the actual survey responses of ${data.outparty} supporters.</p>
+  <p>Below you can see how your guesses compare with actual data from a high-quality, nonpartisan national survey.</p>
 
   <table>
 
   <tr>
-    <th>Democratic norm statements</th>
-    <th>Your estimate</th>
-    <th>National survey results</th>
+    <th>Democratic norm items</th>
+    <th>Your guess</th>
+    <th>Actual figures</th>
   </tr>
 
   <tr>
@@ -149,7 +149,7 @@ function buildOpeningMessage(data) {
   </tr>
 
   <tr>
-    <td>Censor partisan media</td>
+    <td>Censor media</td>
     <td><strong>${data.guessMedia}%</strong></td>
     <td>${data.actualMedia}%</td>
   </tr>
