@@ -98,7 +98,7 @@ function buildOpeningMessage(data) {
     <p class="reflection"> 
     What do you think explains this difference between your guesses and the actual figures? 
     Could social media, news coverage, personal experiences, conversations with others, or something else have shaped your guesses? 
-     <br>
+     </p>
    There's no right answer, so please share your own thoughts.
     </p>
     `;
