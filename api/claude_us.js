@@ -125,7 +125,7 @@ function buildOpeningMessage(data) {
   <table>
   <tr>
     <th>Democratic norm items</th>
-    <th>Your guess</th>
+    <th>Your guesses</th>
     <th>Actual figures</th>
   </tr>
   <tr>
