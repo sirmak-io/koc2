@@ -98,7 +98,7 @@ function buildOpeningMessage(data) {
     <p class="reflection"> 
     What do you think explains this difference between your guesses and the actual figures? 
     Could social media, news coverage, personal experiences, conversations with others, or something else have shaped your guesses? 
-     </p>
+    </p>
    There's no right answer, so please share your own thoughts.
     </p>
     `;
@@ -112,13 +112,12 @@ function buildOpeningMessage(data) {
     reflectionMessage = `
     <p class="reflection">
     You were right that these attitudes are uncommon among ${data.outparty} supporters. However, many supporters of your party tend to estimate them somewhat higher.  
-   <br>
+    </p>
     Why do you think this might be the case? Could social media, news coverage, personal experiences, conversations with others, or something else have shaped your guesses? 
-    <br>
-   There's no right answer, so please share your own thoughts.
+    </p>
+    There's no right answer, so please share your own thoughts.
     </p>
     `;
-
   }
 
   return `
