@@ -150,12 +150,14 @@ function buildOpeningMessage(data) {
   </tr>
   </table>
 
- <div class="summary">
+${data.correctionGroup === "overestimator" ? `
+<div class="summary">
   You overestimated how many ${data.outparty} supporters would agree with these statements.
   On average, your estimates were
   ${Math.abs(data.averageGap)} percentage points ${data.overallDirection}
   than the actual survey figures.
 </div>
+` : ""}
 
   ${reflectionMessage}
   `;
