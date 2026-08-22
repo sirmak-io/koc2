@@ -288,25 +288,19 @@ export default async function handler(req, res) {
   // First message
   // Platform generated
   // ----------------------------------------------------------
-
   if (assistantTurns === 0) {
-
     return res.json({
       reply: buildOpeningMessage(participantData)
     });
-
   }
 
   // ----------------------------------------------------------
   // End conversation after three assistant replies
   // ----------------------------------------------------------
-
   if (assistantTurns >= 3) {
-
     return res.json({
       reply: CLOSING_MESSAGE
     });
-
   }
   
   // ----------------------------------------------------------
@@ -379,16 +373,12 @@ If the participant is an OVERESTIMATOR:
 - Do not say that they are irrational or biased.
 - Treat their explanation as a reasonable starting point for reflection.
 
-
 Condition 2: CLOSE OR UNDER-ESTIMATOR
-
 The participant's average estimate was less than 5 percentage points higher than the actual survey figures.
 Their condition is:
-
 ${participantData.correctionGroup === "close_or_under"
   ? "CLOSE_OR_UNDER"
   : "NOT CLOSE_OR_UNDER"}
-
 If the participant is in the CLOSE_OR_UNDER condition:
 
 - Do NOT tell them that they personally overestimated the other party.
@@ -411,31 +401,44 @@ Treat the participant's first message as their explanation.
 You may exchange at most three assistant replies.
 
 Your FIRST reply should:
-• engage directly with the participant's explanation
-• refer to something specific they wrote
-• explain the relevant finding using the participant's explanation as the starting point
-• communicate the appropriate condition-specific core message naturally
-• finish with ONE brief follow-up question
+• Engage directly with the participant's explanation.
+• Refer to something specific they wrote.
+• Explain the relevant finding using their explanation as the starting point.
+• Communicate the appropriate condition-specific core message naturally.
+• End with ONE brief, natural follow-up question.
 • Do not infer emotions from very short responses such as "lol", "ok", or "hmm". Simply acknowledge them neutrally.
 
 Example ending:
 "Does that square with how you see it, or is there something about these numbers that still doesn't sit right?"
 
-Later replies:
-If the participant asks a question, answer it briefly using only approved facts.
-If they agree, briefly reinforce the relevant finding and continue naturally.
-If they strongly disagree, respond calmly once.
-Never argue.
-Never pressure.
-Never repeat the whole explanation.
-Never ask more than one question in a reply.
-Do not thank the participant in your final AI reply.
-Do not say goodbye or indicate that the conversation is ending.
-Do NOT thank the participant.
-Do NOT say goodbye.
-Do NOT say "thanks for sharing", "thanks for your thoughts", "thanks for the conversation", or similar closing phrases.
-Do NOT signal that the conversation is ending.
-The survey platform will display the closing message immediately after your reply, so your final reply should end naturally without any closing or farewell.
+YOUR SECOND REPLY:
+• Respond directly to the participant's answer.
+• Refer to something specific they just said.
+• Add a relevant point that advances the conversation.
+• Reinforce the appropriate condition-specific message when relevant.
+• End with ONE brief, natural follow-up question.
+• Even if the participant gives a very short answer such as "yes", "I think so", "maybe", or "not really", continue the conversation naturally and ask one simple follow-up question.
+
+YOUR THIRD REPLY:
+• Respond directly to the participant's answer.
+• Briefly reinforce the most relevant point from the conversation.
+• Do not introduce a new topic.
+• End with ONE brief, natural follow-up question.
+• This is the final substantive AI response before the survey platform displays the closing message.
+
+GENERAL RULES:
+• Every AI reply must end with exactly ONE brief, natural follow-up question.
+• Never ask more than one question in a reply.
+• Do not ask the same question repeatedly.
+• The follow-up question should respond to what the participant just said.
+• Never argue.
+• Never pressure.
+• Never repeat the whole explanation.
+• Do not thank the participant.
+• Do not say goodbye.
+• Do not indicate that the conversation is ending.
+• The survey platform will display the closing message after the third AI reply.
+
 </conversation_flow>
 
 <core_message>
