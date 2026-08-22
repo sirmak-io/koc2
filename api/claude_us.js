@@ -95,9 +95,10 @@ function buildOpeningMessage(data) {
   if (data.correctionGroup === "overestimator") {
 
     reflectionMessage = `
-    <p class="reflection">
-    Now that you've seen the comparison, <strong>what do you think explains the differences between your estimates and the survey results? Could social media, news coverage, personal experiences, conversations with others, or something else have shaped your estimates?</strong><br>
-    There's no right answer, so please share your own explanation.
+    <p class="reflection"> 
+    What do you think explains this difference between your guesses and the actual figures? 
+    Could social media, news coverage, personal experiences, conversations with others, or something else have shaped your guesses? 
+    There's no right answer, so please share your own thoughts.
     </p>
     `;
   }
@@ -146,11 +147,12 @@ function buildOpeningMessage(data) {
   </tr>
   </table>
 
-  <div class="summary">
-    On average, your estimates were
-    <strong>${Math.abs(data.averageGap)} percentage points ${data.overallDirection}</strong>
-    than the survey responses.
-  </div>
+ <div class="summary">
+  You overestimated how many ${data.outparty} supporters would agree with these statements.
+  On average, your estimates were
+  ${Math.abs(data.averageGap)} percentage points ${data.overallDirection}
+  than the actual survey figures.
+</div>
 
   ${reflectionMessage}
   `;
