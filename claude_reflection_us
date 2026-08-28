@@ -151,11 +151,6 @@ const participantId = params.get("pid");
 const party = params.get("party");
 const inparty = params.get("inparty");
 const outparty = params.get("outparty");
-const guessPoll = Number(params.get("guess_poll"));
-const guessCourt = Number(params.get("guess_court"));
-const guessMedia = Number(params.get("guess_media"));
-const reasoning = params.get("reasoning");
-
 // ----------------------------------------------------
 // Conversation state
 // ----------------------------------------------------
@@ -204,10 +199,6 @@ function notifyQualtricsChatComplete(){
                 party,
                 inparty,
                 outparty,
-                guessPoll,
-                guessCourt,
-                guessMedia,
-                reasoning,
                 history
             },
             "*"
@@ -246,10 +237,6 @@ async function loadFirstMessage(){
                     party,
                     inparty,
                     outparty,
-                    guessPoll,
-                    guessCourt,
-                    guessMedia,
-                    reasoning,
                     history
                 })
             }
@@ -297,7 +284,7 @@ async function sendMessage() {
     isWaiting = true;
     lockChat();
     try {
-        const response = await fetch("/api/claude_us", {
+        const response = await fetch("/api/claude_reflection_us", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
@@ -309,10 +296,6 @@ async function sendMessage() {
                 party,
                 inparty,
                 outparty,
-                guessPoll,
-                guessCourt,
-                guessMedia,
-                reasoning,
                 history
             })
         });
