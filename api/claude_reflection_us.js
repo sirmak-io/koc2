@@ -117,11 +117,6 @@ export default async function handler(req, res) {
       : BENCHMARKS.Democrat;
 
   // ----------------------------------------------------------
-  // Determine experimental reflection condition
-  // ----------------------------------------------------------
-  const group = correctionGroup(avgGap);
-
-  // ----------------------------------------------------------
   // Store all participant-specific information
   // ----------------------------------------------------------
   const participantData = {
