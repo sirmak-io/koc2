@@ -204,6 +204,18 @@ if (averageGuess >= 19) {
 
 document.getElementById("content").innerHTML = `
 
+<p>
+<strong>Thanks for your guesses!</strong>
+</p>
+
+<p>
+Below you can see how your guesses compare with actual data from a high-quality, nonpartisan national survey.
+</p>
+
+${table}
+
+${correctionMessage}
+`;
 // ----------------------------------------------------
 // Notify Qualtrics that the static correction is complete
 // ----------------------------------------------------
@@ -221,19 +233,7 @@ window.parent.postMessage(
     },
     "*"
 );
-<p>
-<strong>Thanks for your guesses!</strong>
-</p>
 
-<p>
-Below you can see how your guesses compare with actual data from a high-quality, nonpartisan national survey.
-</p>
-
-${table}
-
-${correctionMessage}
-
-`;
 
 </script>
 
