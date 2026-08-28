@@ -8,7 +8,7 @@
 
 const ANTHROPIC_API_KEY = process.env.ANTHROPIC_API_KEY;
 const MODEL = "claude-sonnet-5";
-const MAX_TOKENS = 250;
+const MAX_TOKENS = 400;
 
 // ------------------------------------------------------------
 // Holliday et al. (2024) benchmark values
@@ -215,11 +215,12 @@ SECOND AI REPLY:
 
 THIRD AI REPLY:
 • Respond directly to the participant's answer.
-• Briefly reinforce or summarize the reflection that emerged during the conversation.
+• Briefly summarize the main point that emerged from the conversation.
 • Encourage the participant to consider their explanation from another angle.
 • Do not introduce a new political topic.
+• Keep this final reply concise, preferably 40–60 words.
 • End with ONE brief, natural follow-up question.
-• This is the final substantive AI response before the survey platform displays the closing message.
+• This is the final substantive AI response.
 
 
 GENERAL RULES:
