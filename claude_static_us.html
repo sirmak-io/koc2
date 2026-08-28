@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<title>Static Correction</title>
+
+<style>
+
+body{
+    font-family:Arial,sans-serif;
+    margin:0;
+    padding:20px;
+    background:#ffffff;
+}
+
+#content{
+    background:#f1f1f1;
+    color:#222;
+    border-radius:10px;
+    padding:14px 16px;
+    max-width:95%;
+    font-size:15px;
+    line-height:1.4;
+}
+
+#content p{
+    margin:6px 0;
+    line-height:1.4;
+}
+
+table{
+    width:100%;
+    border-collapse:collapse;
+    margin:12px 0;
+    font-size:14px;
+}
+
+th,
+td{
+    border:1px solid #d9d9d9;
+    padding:6px 8px;
+}
+
+th{
+    background:#f5f5f5;
+    font-weight:600;
+    text-align:left;
+}
+
+th:nth-child(2),
+th:nth-child(3),
+td:nth-child(2),
+td:nth-child(3){
+    text-align:center;
+}
+
+.summary{
+    margin-top:12px;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div id="content"></div>
+
+<script>
+
+// ----------------------------------------------------
+// Participant information passed from Qualtrics
+// ----------------------------------------------------
+
+const params = new URLSearchParams(window.location.search);
+
+const participantId = params.get("pid");
+const party = params.get("party");
+const inparty = params.get("inparty");
+const outparty = params.get("outparty");
+
+const guessPoll = Number(params.get("guess_poll"));
+const guessCourt = Number(params.get("guess_court"));
+const guessMedia = Number(params.get("guess_media"));
+
+
+// ----------------------------------------------------
+// Actual survey figures
+// These refer to the OUTPARTY supporters
+// ----------------------------------------------------
+
+let actualPoll;
+let actualCourt;
+let actualMedia;
+
+if (party === "Democrat") {
+
+    // Democrat respondent estimating Republicans
+    actualPoll = 9;
+    actualCourt = 12;
+    actualMedia = 23;
+
+} else {
+
+    // Republican respondent estimating Democrats
+    actualPoll = 9;
+    actualCourt = 15;
+    actualMedia = 18;
+}
+
+
+// ----------------------------------------------------
+// Calculate average guess and average actual figure
+// ----------------------------------------------------
+
+const averageGuess =
+    (guessPoll + guessCourt + guessMedia) / 3;
+
+const averageActual =
+    (actualPoll + actualCourt + actualMedia) / 3;
+
+const averageGap =
+    averageGuess - averageActual;
+
+
+// ----------------------------------------------------
+// Format numbers
+// ----------------------------------------------------
+
+const roundedAverageGuess =
+    Math.round(averageGuess);
+
+const roundedAverageGap =
+    Math.abs(Math.round(averageGap));
+
+
+// ----------------------------------------------------
+// Build benchmark table
+// ----------------------------------------------------
+
+const table = `
+<table>
+
+<tr>
+    <th>Democratic norm items</th>
+    <th>Your guesses</th>
+    <th>Actual figures</th>
+</tr>
+
+<tr>
+    <td>Reducing polling stations</td>
+    <td><strong>${guessPoll}%</strong></td>
+    <td>${actualPoll}%</td>
+</tr>
+
+<tr>
+    <td>Ignoring court decisions</td>
+    <td><strong>${guessCourt}%</strong></td>
+    <td>${actualCourt}%</td>
+</tr>
+
+<tr>
+    <td>Censor media</td>
+    <td><strong>${guessMedia}%</strong></td>
+    <td>${actualMedia}%</td>
+</tr>
+
+</table>
+`;
+
+
+// ----------------------------------------------------
+// Conditional correction message
+// Threshold = average guess of 19% or higher
+// ----------------------------------------------------
+
+let correctionMessage = "";
+
+if (averageGuess >= 19) {
+
+    correctionMessage = `
+    <p class="summary">
+    You overestimated how many ${outparty} supporters would agree with these statements. On average, your guesses were ${roundedAverageGap} percentage points higher than the actual survey figures.
+    </p>
+    `;
+
+} else {
+
+    correctionMessage = `
+    <p class="summary">
+    You were right that these attitudes are uncommon among ${outparty} supporters. However, many supporters of your party tend to estimate them somewhat higher.
+    </p>
+    `;
+
+}
+
+
+// ----------------------------------------------------
+// Render screen
+// ----------------------------------------------------
+
+document.getElementById("content").innerHTML = `
+
+<p>
+<strong>Thanks for your guesses!</strong>
+</p>
+
+<p>
+Below you can see how your guesses compare with actual data from a high-quality, nonpartisan national survey.
+</p>
+
+${table}
+
+${correctionMessage}
+
+`;
+
+</script>
+
+</body>
+</html>
