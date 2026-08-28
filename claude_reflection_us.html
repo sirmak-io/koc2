@@ -234,7 +234,7 @@ async function loadFirstMessage(){
     lockChat();
     try{
         const response = await fetch(
-            "/api/claude_us",
+            "/api/claude_reflection_us",
             {
                 method:"POST",
                 headers:{
