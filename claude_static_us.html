@@ -204,6 +204,23 @@ if (averageGuess >= 19) {
 
 document.getElementById("content").innerHTML = `
 
+// ----------------------------------------------------
+// Notify Qualtrics that the static correction is complete
+// ----------------------------------------------------
+
+window.parent.postMessage(
+    {
+        type: "chatComplete",
+        participantId,
+        party,
+        inparty,
+        outparty,
+        guessPoll,
+        guessCourt,
+        guessMedia
+    },
+    "*"
+);
 <p>
 <strong>Thanks for your guesses!</strong>
 </p>
