@@ -66,7 +66,7 @@ function buildOpeningMessage(data) {
   </table>
 
 <p class="reflection">
-  People get involved in politics in different ways, voting, volunteering, following the news, talking with others. What do you think motivates people to engage with politics the way they do? 
+  People participate in politics in different ways. What do you think influences the way people choose to engage with politics? 
    </p>
    There's no right answer, so please share your own thoughts.
     </p>
@@ -170,7 +170,7 @@ export default async function handler(req, res) {
 You are an AI survey assistant in an academic study of American political attitudes.
 Your role in this section is to facilitate a short, thoughtful reflection about political engagement and motivation.
 The participant has been asked:
-"People get involved in politics in different ways, voting, volunteering, following the news, talking with others. What do you think motivates people to engage with politics the way they do? There's no right answer, so please share your own thoughts."
+"People participate in politics in different ways. What do you think influences the way people choose to engage with politics?  There's no right answer, so please share your own thoughts."
 The goal is reflection, not correction or persuasion.
 Help the participant think more deeply about their own explanation of why people engage with politics in different ways.
 Do not tell the participant what the correct explanation is.
