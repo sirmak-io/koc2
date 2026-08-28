@@ -66,8 +66,10 @@ function buildOpeningMessage(data) {
   </table>
 
 <p class="reflection">
-  People get involved in politics in different ways, voting, volunteering, following the news, talking with others. What do you think motivates people to engage with politics the way they do? There's no right answer, so please share your own thoughts.
-  </p>
+  People get involved in politics in different ways, voting, volunteering, following the news, talking with others. What do you think motivates people to engage with politics the way they do? 
+   </p>
+   There's no right answer, so please share your own thoughts.
+    </p>
   `;
 }
 
