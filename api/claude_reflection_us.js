@@ -200,7 +200,7 @@ export default async function handler(req, res) {
   // ----------------------------------------------------------
   // Store all participant-specific information
   // ----------------------------------------------------------
-  const participantData = {
+   const participantData = {
     participantId,
     party,
     inparty,
@@ -210,7 +210,13 @@ export default async function handler(req, res) {
     guessMedia,
     actualPoll: actual.poll,
     actualCourt: actual.court,
-    actualMedia: actual.media
+    actualMedia: actual.media,
+    gapPoll,
+    gapCourt,
+    gapMedia,
+    averageGap: avgGap,
+    overallDirection: overallDirection(avgGap),
+    correctionGroup: group
 
   };
 
