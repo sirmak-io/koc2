@@ -42,7 +42,7 @@ function buildOpeningMessage(data) {
 
   <table>
   <tr>
-    <th>Democratic norm items</th>
+    <th>Statements about...</th>
     <th>Your guesses</th>
     <th>Actual figures</th>
   </tr>
@@ -59,7 +59,7 @@ function buildOpeningMessage(data) {
   </tr>
 
   <tr>
-    <td>Censor media</td>
+    <td>Censoring media</td>
     <td><strong>${data.guessMedia}%</strong></td>
     <td>${data.actualMedia}%</td>
   </tr>
