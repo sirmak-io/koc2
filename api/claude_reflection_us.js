@@ -115,6 +115,8 @@ ${data.correctionGroup === "overestimator" ? `
 </div>
 ` : ""}
 
+<p>Now, let's shift to a different topic.</p>
+
 <p class="reflection">
   People participate in politics in different ways. What do you think influences the way people choose to engage with politics? 
    </p>
