@@ -106,6 +106,15 @@ function buildOpeningMessage(data) {
   </tr>
   </table>
 
+${data.correctionGroup === "overestimator" ? `
+<div class="summary">
+  You overestimated how many ${data.outparty} supporters would agree with these statements.
+  On average, your estimates were
+  ${Math.abs(data.averageGap)} percentage points ${data.overallDirection}
+  than the actual survey figures.
+</div>
+` : ""}
+
 <p class="reflection">
   People participate in politics in different ways. What do you think influences the way people choose to engage with politics? 
    </p>
