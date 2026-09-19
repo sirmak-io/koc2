@@ -168,6 +168,35 @@ export default async function handler(req, res) {
       ? BENCHMARKS.Republican
       : BENCHMARKS.Democrat;
 
+// ----------------------------------------------------------
+  // Compute participant-specific quantities
+  // ----------------------------------------------------------
+ 
+  const gapPoll = difference(
+    guessPoll,
+    actual.poll
+  );
+ 
+  const gapCourt = difference(
+    guessCourt,
+    actual.court
+  );
+ 
+  const gapMedia = difference(
+    guessMedia,
+    actual.media
+  );
+ 
+  const avgGap = average([
+    gapPoll,
+    gapCourt,
+    gapMedia
+  ]);
+ 
+  const group = correctionGroup(avgGap);
+ 
+  
+
   // ----------------------------------------------------------
   // Store all participant-specific information
   // ----------------------------------------------------------
