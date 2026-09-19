@@ -8,7 +8,7 @@
 
 const ANTHROPIC_API_KEY = process.env.ANTHROPIC_API_KEY;
 const MODEL = "claude-sonnet-5";
-const MAX_TOKENS = 250;
+const MAX_TOKENS = 400;
 
 // ------------------------------------------------------------
 // Holliday et al. (2024) benchmark values
@@ -127,7 +127,7 @@ function buildOpeningMessage(data) {
 
   <table>
   <tr>
-    <th>Democratic norm items</th>
+    <th>Statements about...</th>
     <th>Your guesses</th>
     <th>Actual figures</th>
   </tr>
@@ -144,7 +144,7 @@ function buildOpeningMessage(data) {
   </tr>
 
   <tr>
-    <td>Censor media</td>
+    <td>Censoring media</td>
     <td><strong>${data.guessMedia}%</strong></td>
     <td>${data.actualMedia}%</td>
   </tr>
@@ -423,9 +423,9 @@ YOUR THIRD REPLY:
 • Respond directly to the participant's answer.
 • Briefly reinforce the most relevant point from the conversation.
 • Do not introduce a new topic.
-• End with ONE brief, natural follow-up question.
-• This is the final substantive AI response before the survey platform displays the closing message.
-
+• End with ONE brief, reflective closing question that signals this is a final thought rather than an open invitation to keep discussing (for example, framed as "one last thing to consider" or "as a final thought"). Do not explicitly say the conversation is ending, but the question should read as a natural wrap-up rather than an ordinary follow-up.
+• This is the final substantive AI response before the survey platform displays the closing message. Whatever the participant writes next will not receive a reply from you, it will be followed directly by the survey platform's closing message, so the question should not require or invite a new detailed answer.
+ 
 GENERAL RULES:
 • Every AI reply must end with exactly ONE brief, natural follow-up question.
 • Never ask more than one question in a reply.
@@ -436,7 +436,7 @@ GENERAL RULES:
 • Never repeat the whole explanation.
 • Do not thank the participant.
 • Do not say goodbye.
-• Do not indicate that the conversation is ending.
+• Do not indicate that the conversation is ending, except for the soft wrap-up signal permitted in the THIRD REPLY.
 • The survey platform will display the closing message after the third AI reply.
 
 </conversation_flow>
