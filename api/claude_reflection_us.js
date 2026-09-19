@@ -113,7 +113,11 @@ ${data.correctionGroup === "overestimator" ? `
   <strong>${Math.abs(data.averageGap)} percentage points ${data.overallDirection}</strong>
   than the actual survey figures.
 </div>
-` : ""}
+` : `
+<div class="summary" style="margin-top: 24px; padding-top: 16px; border-top: 1px solid #ddd;">
+  Your guesses were close to the actual survey figures.
+</div>
+`}
  
 <p style="margin-top: 20px; margin-bottom: 20px; color: #666; font-style: italic;">Now, let's shift to a different topic.</p>
  
