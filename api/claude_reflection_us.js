@@ -78,10 +78,10 @@ function buildOpeningMessage(data) {
 
   return `
   <p>Thanks for your guesses!</p>
-
+ 
   <p>Below you can see how your guesses compare with actual data from a high-quality, nonpartisan national survey.</p>
-
-  <table>
+ 
+  <table style="margin-top: 16px; margin-bottom: 8px;">
   <tr>
     <th>Statements about...</th>
     <th>Your guesses</th>
@@ -92,39 +92,38 @@ function buildOpeningMessage(data) {
     <td><strong>${data.guessPoll}%</strong></td>
     <td>${data.actualPoll}%</td>
   </tr>
-
+ 
   <tr>
     <td>Ignoring court decisions</td>
     <td><strong>${data.guessCourt}%</strong></td>
     <td>${data.actualCourt}%</td>
   </tr>
-
+ 
   <tr>
     <td>Censoring media</td>
     <td><strong>${data.guessMedia}%</strong></td>
     <td>${data.actualMedia}%</td>
   </tr>
   </table>
-
+ 
 ${data.correctionGroup === "overestimator" ? `
-<div class="summary">
+<div class="summary" style="margin-top: 24px; padding-top: 16px; border-top: 1px solid #ddd;">
   You overestimated how many ${data.outparty} supporters would agree with these statements.
   On average, your estimates were
-  ${Math.abs(data.averageGap)} percentage points ${data.overallDirection}
+  <strong>${Math.abs(data.averageGap)} percentage points ${data.overallDirection}</strong>
   than the actual survey figures.
 </div>
 ` : ""}
-
-<p>Now, let's shift to a different topic.</p>
-
-<p class="reflection">
+ 
+<p style="margin-top: 20px; margin-bottom: 20px; color: #666; font-style: italic;">Now, let's shift to a different topic.</p>
+ 
+<p class="reflection" style="margin-top: 16px;">
   People participate in politics in different ways. What do you think influences the way people choose to engage with politics? 
    </p>
-   There's no right answer, so please share your own thoughts.
-    </p>
+   <p style="margin-top: 12px;">There's no right answer, so please share your own thoughts.</p>
   `;
 }
-
+ 
 // ------------------------------------------------------------
 // Platform-generated closing message
 // ------------------------------------------------------------
