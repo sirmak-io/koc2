@@ -115,7 +115,7 @@ ${data.correctionGroup === "overestimator" ? `
 </div>
 ` : `
 <div class="summary" style="margin-top: 24px; padding-top: 16px; border-top: 1px solid #ddd;">
-  Your guesses were close to the actual survey figures.
+  On average, your guesses were close to the actual survey figures.
 </div>
 `}
  
