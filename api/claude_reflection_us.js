@@ -29,6 +29,47 @@ const BENCHMARKS = {
 };
 
 // ------------------------------------------------------------
+// Helper functions
+// ------------------------------------------------------------
+ 
+function difference(estimate, actual) {
+  return Number((estimate - actual).toFixed(1));
+}
+ 
+ 
+function average(values) {
+  return Number(
+    (
+      values.reduce((a, b) => a + b, 0) /
+      values.length
+    ).toFixed(1)
+  );
+}
+ 
+function overallDirection(avgGap) {
+  if (avgGap > 0) return "higher";
+  if (avgGap < 0) return "lower";
+  return "the same";
+}
+ 
+// ------------------------------------------------------------
+// Determine participant condition
+// ------------------------------------------------------------
+ 
+function correctionGroup(avgGap) {
+ 
+  // Participant overestimated the out-party by
+  // at least 5 percentage points on average.
+  if (avgGap >= 5) {
+    return "overestimator";
+  }
+ 
+  // Participant's estimate was close to or below
+  // the actual survey figures.
+  return "close_or_under";
+}
+
+// ------------------------------------------------------------
 // Platform-generated opening message
 // (Claude is NOT called)
 // ------------------------------------------------------------
