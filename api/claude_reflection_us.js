@@ -246,11 +246,97 @@ export default async function handler(req, res) {
   // ----------------------------------------------------------
   // End conversation after three assistant replies
   // ----------------------------------------------------------
+  // Instead of a hardcoded regex check for "?", let the model
+  // itself judge whether the participant's final message raises
+  // a question or point worth a brief reply. If not, it returns
+  // a sentinel value and we fall back to the plain closing message.
+  // ----------------------------------------------------------
   if (assistantTurns >= 3) {
-    return res.json({
-      reply: CLOSING_MESSAGE
-    });
+ 
+    const closingPrompt = `
+You are the same AI survey assistant from this reflective conversation about political engagement and motivation.
+The conversation has already reached its final turn.
+ 
+First, judge whether the participant's most recent message raises a genuine question or point that deserves a brief reply (this includes direct questions, but also comments that clearly invite a response, such as a strong claim or an explicit request for your view).
+A short closing remark, acknowledgment, "ok", "thanks", or similar with nothing substantive to address does NOT count.
+ 
+If there is nothing worth addressing, respond with exactly this and nothing else:
+NONE
+ 
+If there is something worth addressing, respond with ONE brief sentence, under 25 words, and nothing else.
+Stay strictly within the same scope as the rest of this conversation: political engagement and motivation in general.
+Do not discuss the participant's earlier estimates, the benchmark survey figures, or democratic norms, even if asked directly.
+If the question falls outside this scope (for example, about their guesses, the study's purpose, or something unrelated to political engagement), briefly and neutrally note that this part of the survey has concluded, without answering the off-scope part.
+Do not ask a follow-up question.
+Do not say goodbye.
+Do not thank the participant.
+Plain text only. No markdown.
+`;
+ 
+    const closingMessages = history.map(message => ({
+      role: message.role,
+      content: message.content
+    }));
+ 
+    try {
+ 
+      const closingResponse = await fetch(
+        "https://api.anthropic.com/v1/messages",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "x-api-key": ANTHROPIC_API_KEY,
+            "anthropic-version": "2023-06-01"
+          },
+          body: JSON.stringify({
+            model: MODEL,
+            max_tokens: 100,
+            system: closingPrompt,
+            messages: closingMessages
+          })
+        }
+      );
+ 
+      if (!closingResponse.ok) {
+        // Fall back to the plain closing message rather than failing the turn.
+        return res.json({
+          reply: CLOSING_MESSAGE
+        });
+      }
+ 
+      const closingData = await closingResponse.json();
+ 
+      const closingTextBlock = closingData.content.find(
+        block => block.type === "text"
+      );
+ 
+      const rawAnswer = closingTextBlock?.text?.trim();
+ 
+      const hasSomethingToAddress =
+        rawAnswer && rawAnswer.toUpperCase() !== "NONE";
+ 
+      const combinedReply = hasSomethingToAddress
+        ? `<p>${rawAnswer}</p><p>${CLOSING_MESSAGE}</p>`
+        : CLOSING_MESSAGE;
+ 
+      return res.json({
+        reply: combinedReply
+      });
+ 
+    } catch (error) {
+ 
+      console.error("Closing-turn Claude call failed:");
+      console.error(error);
+ 
+      // Fall back to the plain closing message rather than failing the turn.
+      return res.json({
+        reply: CLOSING_MESSAGE
+      });
+ 
+    }
   }
+  
   
   // ----------------------------------------------------------
   // System prompt
