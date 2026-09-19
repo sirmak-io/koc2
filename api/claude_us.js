@@ -92,40 +92,38 @@ function buildOpeningMessage(data) {
   // GROUP 1: OVERESTIMATORS
   // ----------------------------------------------------------
 
+ 
   if (data.correctionGroup === "overestimator") {
-
+ 
     reflectionMessage = `
-    <p class="reflection"> 
+    <p class="reflection" style="margin-top: 0;"> 
     What do you think explains this difference between your guesses and the actual figures? 
     Could social media, news coverage, personal experiences, conversations with others, or something else have shaped your guesses? 
     </p>
-   There's no right answer, so please share your own thoughts.
-    </p>
+    <p style="margin-top: 12px;">There's no right answer, so please share your own thoughts.</p>
     `;
   }
   // ----------------------------------------------------------
   // GROUP 2: CLOSE OR UNDER-ESTIMATORS
   // ----------------------------------------------------------
-
+ 
   else {
-
+ 
     reflectionMessage = `
-    <p class="reflection">
+    <p class="reflection" style="margin-top: 0;">
     You were right that these attitudes are uncommon among ${data.outparty} supporters. However, many supporters of your party tend to estimate them somewhat higher.  
     </p>
-    Why do you think this might be the case? Could social media, news coverage, personal experiences, conversations with others, or something else have shaped your guesses? 
-    </p>
-    There's no right answer, so please share your own thoughts.
-    </p>
+    <p style="margin-top: 12px;">Why do you think this might be the case? Could social media, news coverage, personal experiences, conversations with others, or something else have shaped your guesses?</p>
+    <p style="margin-top: 12px;">There's no right answer, so please share your own thoughts.</p>
     `;
   }
-
+ 
   return `
   <p>Thanks for your guesses!</p>
-
+ 
   <p>Below you can see how your guesses compare with actual data from a high-quality, nonpartisan national survey.</p>
-
-  <table>
+ 
+  <table style="margin-top: 16px; margin-bottom: 8px;">
   <tr>
     <th>Statements about...</th>
     <th>Your guesses</th>
@@ -136,32 +134,35 @@ function buildOpeningMessage(data) {
     <td><strong>${data.guessPoll}%</strong></td>
     <td>${data.actualPoll}%</td>
   </tr>
-
+ 
   <tr>
     <td>Ignoring court decisions</td>
     <td><strong>${data.guessCourt}%</strong></td>
     <td>${data.actualCourt}%</td>
   </tr>
-
+ 
   <tr>
     <td>Censoring media</td>
     <td><strong>${data.guessMedia}%</strong></td>
     <td>${data.actualMedia}%</td>
   </tr>
   </table>
-
+ 
+<div style="margin-top: 24px; padding-top: 16px; border-top: 1px solid #ddd;">
 ${data.correctionGroup === "overestimator" ? `
 <div class="summary">
   You overestimated how many ${data.outparty} supporters would agree with these statements.
   On average, your estimates were
-  ${Math.abs(data.averageGap)} percentage points ${data.overallDirection}
+  <strong>${Math.abs(data.averageGap)} percentage points ${data.overallDirection}</strong>
   than the actual survey figures.
 </div>
 ` : ""}
-
+ 
   ${reflectionMessage}
+</div>
   `;
 }
+ 
 
 // ------------------------------------------------------------
 // Platform-generated closing message
