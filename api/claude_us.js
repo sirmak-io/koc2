@@ -151,10 +151,9 @@ function buildOpeningMessage(data) {
 <div style="margin-top: 24px; padding-top: 16px; border-top: 1px solid #ddd;">
 ${data.correctionGroup === "overestimator" ? `
 <div class="summary">
-  You overestimated how many ${data.outparty} supporters would agree with these statements.
+  You <strong>overestimated</strong> how many ${data.outparty} supporters would agree with these statements.
   On average, your estimates were
-  <strong>${Math.abs(data.averageGap)} percentage points ${data.overallDirection}</strong>
-  than the actual survey figures.
+  <strong>${Math.abs(data.averageGap)} percentage points ${data.overallDirection} than the actual figures</strong>.
 </div>
 ` : ""}
  
@@ -162,7 +161,6 @@ ${data.correctionGroup === "overestimator" ? `
 </div>
   `;
 }
- 
 
 // ------------------------------------------------------------
 // Platform-generated closing message
