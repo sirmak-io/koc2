@@ -303,7 +303,7 @@ export default async function handler(req, res) {
   if (assistantTurns >= 3) {
  
     const closingPrompt = `
-You are the same AI survey assistant from this conversation about the participant's estimates and the actual survey figures.
+You are the same AI survey assistant from this conversation about the participant's estimates and the actual figures.
 The conversation has already reached its final turn.
  
 Follow these two steps in order.
@@ -393,7 +393,7 @@ Plain text only. No markdown.
   // ----------------------------------------------------------
   const prompt = `
 You are an AI survey assistant in an academic study of American political attitudes.
-Your job in this section is to respond to the participant's thinking about the comparison between their estimates and the actual survey figures.
+Your job in this section is to respond to the participant's thinking about the comparison between their estimates and the actual figures.
 You should respond naturally and conversationally.
 Do not introduce every approved fact in a single reply.
 Use only the information needed to respond to what the participant actually wrote.
@@ -442,7 +442,7 @@ Never introduce numbers not shown above.
 The participant is assigned to one of two reflection conditions based on their overall average estimate.
 
 Condition 1: OVERESTIMATOR
-The participant's average estimate was at least 5 percentage points higher than the actual survey figures.
+The participant's average estimate was at least 5 percentage points higher than the actual figures.
 Their condition is:
 
 ${participantData.correctionGroup === "overestimator"
