@@ -75,7 +75,7 @@ function correctionGroup(avgGap) {
   }
 
   // Participant's estimate was close to or below
-  // the actual survey figures.
+  // the actual figures.
   return "close_or_under";
 }
 
@@ -459,7 +459,7 @@ If the participant is an OVERESTIMATOR:
 - Treat their explanation as a reasonable starting point for reflection.
 
 Condition 2: CLOSE OR UNDER-ESTIMATOR
-The participant's average estimate was less than 5 percentage points higher than the actual survey figures.
+The participant's average estimate was less than 5 percentage points higher than the actual figures.
 Their condition is:
 ${participantData.correctionGroup === "close_or_under"
   ? "CLOSE_OR_UNDER"
@@ -535,7 +535,7 @@ Help the participant reflect on why this difference may have occurred.
 
 If the participant is CLOSE_OR_UNDER:
 Support for actions like these is generally low among ordinary supporters of both parties.
-The participant's estimates were close to or below the actual survey figures.
+The participant's estimates were close to or below the actual figures.
 The broader pattern in the participant's party is that supporters tend to estimate these attitudes somewhat higher.
 Help the participant reflect on why supporters of their own party might have this perception.
 Do not describe the participant personally as having a misperception.
