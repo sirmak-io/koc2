@@ -110,11 +110,11 @@ ${data.correctionGroup === "overestimator" ? `
 <div class="summary" style="margin-top: 24px; padding-top: 16px; border-top: 1px solid #ddd;">
   You <strong>overestimated</strong> how many ${data.outparty} supporters would agree with these statements.
   On average, your estimates were
-  <strong>${Math.abs(data.averageGap)} percentage points ${data.overallDirection} than the actual survey figures</strong>.
+  <strong>${Math.abs(data.averageGap)} percentage points ${data.overallDirection} than the actual figures</strong>.
 </div>
 ` : `
 <div class="summary" style="margin-top: 24px; padding-top: 16px; border-top: 1px solid #ddd;">
-  On average, your guesses were close to the actual survey figures.
+  On average, your guesses were close to the actual figures.
 </div>
 `}
  
