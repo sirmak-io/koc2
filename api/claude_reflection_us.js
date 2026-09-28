@@ -118,7 +118,7 @@ ${data.correctionGroup === "overestimator" ? `
 </div>
 `}
  
-<p style="margin-top: 20px; margin-bottom: 20px; color: #666; font-style: italic;">Now, let's shift to a different topic.</p>
+<p style="margin-top: 20px; margin-bottom: 20px;">Now, let's shift to a different topic.</p>
  
 <p class="reflection" style="margin-top: 16px;">
   People participate in politics in different ways. What do you think influences the way people choose to engage with politics? 
